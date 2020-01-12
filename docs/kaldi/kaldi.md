@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Kaldi Tutorial
-nav_order: 8
+nav_order: 9
 permalink: /docs/kaldi
 ---
 
