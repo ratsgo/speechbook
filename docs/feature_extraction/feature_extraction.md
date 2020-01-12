@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Acoustic Feature Extraction
+title: Feature Extraction
 nav_order: 3
 has_children: true
 permalink: /docs/fe

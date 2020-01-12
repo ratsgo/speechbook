@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Hidden Markov Model
-nav_order: 4
-has_children: true
-permalink: /docs/hmm
+nav_order: 1
+parent: Acoustic Models
+permalink: /docs/am/hmm
 ---
 
 # Hidden Markov Model
