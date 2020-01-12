@@ -6,6 +6,272 @@ parent: Neural Feature Extraction
 permalink: /docs/neuralfe/sincnet
 ---
 
-# SincNet
+# SincNet (중간 진행)
+{: .no_toc }
 
-뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다.
+
+뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다. SincNet은 벤지오 연구팀이 2019년 발표한 [SPEAKER RECOGNITION FROM RAW WAVEFORM WITH SINCNET](https://arxiv.org/pdf/1808.00158.pdf) 논문에서 제안됐는데요. 음성 특질 추출에 유리한 컨볼루션 신경망(Convolutional Neural Network)의 첫번째 레이어에 sinc function을 도입해 계산 효율성과 성능 두 마리 토끼를 잡아서 주목받았습니다.
+{: .fs-4 .ls-1 .code-example }
+
+
+## Table of contents
+{: .no_toc .text-delta .mt-6}
+
+1. TOC
+{:toc}
+
+---
+
+
+## 모델 개요
+
+SincNet 모델 개요는 다음과 같습니다. 저자들은 음성 피처 추출에 첫번째 레이어가 가장 중요하다고 보고 해당 레이어에 sinc function을 사용해 필터를 만들었습니다. 이들 sincnet 필터들은 각각의 주파수 영역대 정보를 raw waveform으로부터 추출해 상위 레이어로 보냅니다. 
+
+## **그림1** sincnet 
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/n1EXsWV.png" width="400px" title="source: imgur.com" />
+
+그 위 레이어들은 여느 뉴럴넷에 있는 구조와 별반 다르지 않고요. 화자(speaker)가 누구(index)인지 맞추는 과정에서 SincNet이 학습딥니다. SincNet 모델을 이해하기 위해서는 `시간(time) 도메인에서의 컨볼루션 연산`과 `주파수(frequency) 도메인에서의 곱셈(multiplication) 연산` 두 개념을 이해할 필요가 있습니다. 다음 장에서 차례대로 살펴보겠습니다.
+
+
+---
+
+
+## 시간 도메인에서의 컨볼루션 연산
+
+시간 도메인에서의 컨볼루션 연산의 정의는 다음 수식1과 같습니다. $x\left[ n \right]$은 시간 도메인에서의 $n$번째 raw wave sample, $h\left[ n \right]$은 컨볼루션 필터(filter, 1D 벡터)의 $n$번째 요소값, $y\left[ n \right]$은 컨볼루션 수행 결과의 $n$번째 값을 각각 가리킵니다. $L$은 필터의 길이(length)를 나타냅니다.
+
+
+## **수식1** 시간 도메인에 대한 컨볼루션 연산
+{: .no_toc .text-delta }
+$$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L-1 }{ x\left[ l \right] \cdot h\left[ n-1 \right]  }$$
+
+
+
+예컨대 필터 길이 $L$이 3이라면 수식1에 따라 게산되는 과정은 다음과 같을 겁니다.
+
+
+## **수식2** 컨볼루션 연산 예시
+{: .no_toc .text-delta }
+$$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L-1 }{ x\left[ l \right] \cdot h\left[ n-1 \right]  }$$
+
+
+이렇게만 보면 정말 알쏭달쏭하죠. 그림으로 이해해 봅시다. 일단 입력 wave 시그널이 그림2, 컨볼루션 필터가 그림3과 같다고 합시다. 
+
+## **그림2** input waveform 예시
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/TNF1k2k.jpg" width="400px" title="source: imgur.com" />
+
+## **그림3** 컨볼루션 필터 예시
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/7Fp6Zn0.jpg" width="400px" title="source: imgur.com" />
+
+컨볼루션 연산은 **컨볼루션 필터를 Y축으로 뒤집어 필터와 time step별 입력을 내적(inner product)하는 것과 같습니다.** 그림4를 수식2와 비교해서 보면 정확히 들어맞음을 확인할 수 있습니다.
+
+## **그림4** 컨볼루션 연산 예시
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/AQ8wz1C.jpg" width="400px" title="source: imgur.com" />
+<br>
+<img src="https://i.imgur.com/x2qYYXw.jpg" width="400px" title="source: imgur.com" />
+<br>
+<img src="https://i.imgur.com/BL9UK1h.jpg" width="400px" title="source: imgur.com" />
+
+컨볼루션 연산 결과물인 $y$은 입력 시그널 $x$와 그에 곱해진 컨볼루션 필터 $h$와의 관련성이 높을 수록 커집니다. 혹은 특정 입력 시그널을 완전히 무시할 수도 있습니다. 다시 말해 **컨볼루션 필터는 특정 주파수 성분을 입력 신호에서 부각하거나 감쇄시킨다**는 것입니다. Sinc Function이 바로 이런 컨볼루션 필터 역할을 담당합니다. 그 식은 수식3과 같습니다.
+
+
+## **수식3** sinc function
+{: .no_toc .text-delta }
+$$\text{ sinc } {\left( x \right)} ={ \sin { \left( x \right) }  }/{ x }$$
+
+
+---
+
+
+## 주파수 도메인에서의 곱셈 연산
+
+주파수 도메인에서 음성 신호의 특정 주파수만 남기고 나머지 영역대를 캔슬하고 싶다면 어떻게 하면 될까요? 입력 신호에 그림5와 같은 Rectangular function을 곱하면(multiplication) 될 겁니다. 이렇게 특정 주파수 영역대만 남기는 역할을 하는 함수를 `bandpass filter`라고 부릅니다. 
+
+
+## **그림5** Rectangular function
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/FgzqVBY.jpg" width="400px" title="source: imgur.com" />
+
+
+---
+
+## Sinc/Rectangular function의 관계
+
+특정 Sinc Function을 푸리에 변환(Fourier Transform)한 결과는 Rectangular function이 됩니다. 그 역도 성립합니다. 그 관계는 다음 그림5와 같습니다.
+
+## **그림5** Sinc/Rectangular functions
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/Fv8YDzS.jpg" width="400px" title="source: imgur.com" />
+
+
+Sinc Function은 시간 도메인, Rectangular function은 주파수 도메인에 연관이 있습니다. 시간 도메인에서 Sinc Function으로 입력 신호를 컨볼루션 연산하는 것과 주파수 도메인에서 Rectangular function으로 multiplication하는 것은 동치(equivalent)입니다.
+
+
+그림5 sinc function에서 각각의 봉우리를 `lobe`라고 합니다. 가장 높은 봉우리(main lobe)는 해당 컨볼루션 필터가 주로 잡아내는 주파수 영역대가 될 겁니다. 하지만 이것 말고도 작은 봉우리(side lobe)들이 많습니다. 이들 주파수 영역대도 컨볼루션 연산으로 살아남기 때문에 노이즈로 작용할 수 있습니다. 이를 `side lobe effect`라고 합니다.
+{: .fs-4 .ls-1 .code-example }
+
+
+그러면 이해가 상대적으로 쉬운 주파수 도메인 기준으로 생각을 해볼까요? Rectangular function이 그림6과 같은 음성 신호가 있다고 가정해 봅시다. 그럼 Rectangular function을 주파수 도메인에서 입력 신호와 곱하면(multiplication) $f_1$과 $f_2$ 사이의 주파수만 남고 나머지는 없어질 겁니다(그림6의 상단). 이는 시간 도메인에서 Sinc function으로 입력 신호에 컨볼루션 연산을 수행한 결과에 대응합니다(그림6의 하단).
+
+
+## **그림6** 주파수 도메인의 곱셈 vs 시간 도메인의 컨볼루션 (1)
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/bVDA6Qo.jpg" width="450px" title="source: imgur.com" />
+
+
+만일 그림7처럼 Sinc/Rectangular function이 극단적인 형태라면 입력 신호가 걸러지지 않고 그대로 리턴이 될 겁니다.
+
+
+## **그림6** 주파수 도메인의 곱셈 vs 시간 도메인의 컨볼루션 (2)
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/w3ODRrt.jpg" width="450px" title="source: imgur.com" />
+
+
+---
+
+
+## SincNet
+
+먼길을 돌아왔습니다. 자 이제 SincNet을 살펴볼 시간입니다. 수식4는 입력 음성 신호에 대해 모델의 첫번째 레이어에서 SincNet 컨볼루션을 수행하는 걸 나타냅니다. $n$은 입력 음성 시그널의 $n$번째 샘플, $g$는 $n$번째 입력 시
+
+
+## **수식4** SincNet
+{: .no_toc .text-delta }
+$$y\left[ n \right] =x\left[ n \right] \ast g\left[ n,\theta  \right]$$
+
+
+## **수식5** 주파수 도메인에서의 SincNet 연산
+{: .no_toc .text-delta }
+$$G\left[ f,{ f }_{ 1 },{ f }_{ 2 } \right] =\text{ rect } \left( \frac { f }{ { 2f }_{ 2 } }  \right) - \text{ rect } \left( \frac { f }{ { 2f }_{ 1 } }  \right)$$
+
+## **수식6** 시간 도메인에서의 SincNet 연산
+{: .no_toc .text-delta }
+$$g\left[ f,{ f }_{ 1 },{ f }_{ 2 } \right] =2{ f }_{ 2 } \text{ sinc } \left( 2\pi { f }_{ 2 }n \right) -2{ f }_{ 1 } \text{ sinc } \left( 2\pi { f }_{ 1 }n \right)$$
+
+
+## **수식5** constraint
+{: .no_toc .text-delta }
+$${ f }_{ 1 }^{ abs }=\left| { f }_{ 1 } \right| \\ { f }_{ 2 }^{ abs }={ f }_{ 1 }+\left| { f }_{ 2 }-{ f }_{ 1 } \right|$$
+
+
+## **수식6** constraint
+{: .no_toc .text-delta }
+$${ g }_{ w }\left[ n,{ f }_{ 1 },{ f }_{ 2 } \right] ={ g }_{ w }\left[ n,{ f }_{ 1 },{ f }_{ 2 } \right] \cdot w\left[ n \right]$$
+
+## **수식5** Hamming window
+{: .no_toc .text-delta }
+$$w\left[ n \right] =0.54-0.46\cdot \cos { \left( \frac { 2\pi n }{ L }  \right)  }$$
+
+
+## **코드1** Hamming window
+{: .no_toc .text-delta }
+```python
+import torch, math
+import torch.nn.functional as F
+import numpy as np
+
+out_channels = 80
+# kernel size는 홀수로 강제
+# 계산효율성 위해 sinc conv filter를 symmetric하게 만들기 위해
+# center 앞뒤로 n개씩 (2n+1)
+kernel_size = 251
+sample_rate = 16000
+in_channels = 1
+stride = 1
+padding = 0
+dilation = 1
+# sincnet에서는 bias가 없다
+bias = False
+# sincnet에서는 그룹이 1이다
+groups = 1
+min_low_hz = 50
+min_band_hz = 50
+
+# initialize filterbanks such that they are equally spaced in Mel scale
+low_hz = 30 # low_hz는 가청 주파수(frequency response)에 대응? 20~20000Hz
+high_hz = sample_rate / 2 - (min_low_hz + min_band_hz) # 7900Hz
+
+
+def to_mel(hz):
+    return 2595 * np.log10(1 + hz / 700)
+
+
+def to_hz(mel):
+    return 700 * (10 ** (mel / 2595) - 1)
+
+
+# low cut frequency f1과 high cut frequency f2의 초기값 만들기
+# sincnet의 하이퍼파라메터를 바꾸지 않는 한 초기값은 항상 똑같다(deterministic)
+
+# low_hz를 mel scale : 30 > 47.29
+# high_hz를 mel scale : 7900 > 2826.99
+# 이 범위의 구간을 (out_channels + 1)차원 벡터로 변환
+# 따라서 mel[0] = 47.29, mel[-1] = 2826.99
+mel = np.linspace(to_mel(low_hz),
+                  to_mel(high_hz),
+                  out_channels + 1)
+# mel을 hz 단위로 다시 변경
+# hz[0] = 30, hz[-1] = 7900
+# 따라서 hz는 (out_channels + 1)차원 벡터이되
+# 각 요소값들 차이는 mel scale이 됨 // 저주파수대 영역을 잘 보기 위해서
+hz = to_hz(mel)
+
+# filter lower frequency들의 초기값 (out_channels, 1)
+# hz에서 마지막 요소를 제외하고 low_hz_ 만드는데 이용
+# 따라서 low_hz_는 (out_channels, 1) 크기가 됨
+# trainable scalar
+low_hz_ = torch.nn.Parameter(torch.Tensor(hz[:-1]).view(-1, 1))
+
+# filter higher frequency band들의 초기값 (out_channels, 1)
+# trainable scalar
+# np.diff는 각 요소값들 간 차이를 리턴
+# ex) np.diff([1,2,4,8]) = array([1, 2, 4])
+band_hz_ = torch.nn.Parameter(torch.Tensor(np.diff(hz)).view(-1, 1))
+
+# Hamming window
+# computing only half of the window (because symmetric)
+n_lin = torch.linspace(0, (kernel_size / 2) - 1, steps=int((kernel_size / 2)))
+window_ = 0.54 - 0.46 * torch.cos(2 * math.pi * n_lin / kernel_size)
+
+n = (kernel_size - 1) / 2.0
+# Due to symmetry, I only need half of the time axes
+n_ = 2 * math.pi * torch.arange(-n, 0).view(1, -1) / sample_rate
+
+# 이하는 forward
+# 'low' cut freq f1과 'high' cut freq f2는 계속 갱신된다
+low = min_low_hz + torch.abs(low_hz_)
+# clamp : input이 min보다 작으면 min, max보다 크면 max, 그 사이이면 input 그대로 리턴
+high = torch.clamp(input=low + min_band_hz + torch.abs(band_hz_),
+                   min=min_low_hz,
+                   max=sample_rate / 2)
+band = (high - low)[:, 0]
+
+f_times_t_low = torch.matmul(low, n_)
+f_times_t_high = torch.matmul(high, n_)
+
+# Equivalent of Eq.4 of the reference paper
+# I just have expanded the sinc and simplified the terms.
+# This way I avoid several useless computations.
+band_pass_left = ((torch.sin(f_times_t_high) - torch.sin(f_times_t_low)) / (n_ / 2)) * window_
+band_pass_center = 2 * band.view(-1, 1)
+band_pass_right = torch.flip(band_pass_left, dims=[1])
+
+# symmetric
+band_pass = torch.cat([band_pass_left, band_pass_center, band_pass_right], dim=1)
+
+band_pass = band_pass / (2 * band[:, None])
+
+# filters shape : out_channels, in_channels, kernel_size
+# 초기값에 따르면 0번 필터는 저주파수 영역대 관장, 마지막 필터는 고주파수 영역대 bandpass
+# 하지만 전체 필터(out_channels=80개)는 학습 중에 각각이 담당하는 band pass가 변화하게 된다
+filters = (band_pass).view(out_channels, 1, kernel_size)
+
+# 이후 이 80개 필터들이 각각 입력 raw wave에 대해 1d conv 실시
+sincnet_result = F.conv1d(waveforms, filters, stride=stride,
+                          padding=padding, dilation=dilation,
+                          bias=None, groups=1)
+```
