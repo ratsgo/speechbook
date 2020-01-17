@@ -201,27 +201,6 @@ SincNet 저자들은 컨볼루션 필터(=싱크 함수)에 해밍 윈도우를 
 ---
 
 
-## Sinc/Rectangular function의 관계
-
-특정 Sinc Function을 푸리에 변환(Fourier Transform)한 결과는 Rectangular function이 됩니다. 그 역도 성립합니다. 그 관계는 다음 그림5와 같습니다.
-
-## **그림5** Sinc/Rectangular functions
-{: .no_toc .text-delta }
-<img src="https://i.imgur.com/Fv8YDzS.jpg" width="400px" title="source: imgur.com" />
-
-
-Sinc Function은 시간 도메인, Rectangular function은 주파수 도메인에 연관이 있습니다. 시간 도메인에서 Sinc Function으로 입력 신호를 컨볼루션 연산하는 것과 주파수 도메인에서 Rectangular function으로 multiplication하는 것은 동치(equivalent)입니다.
-
-
-
-
-
-
-
-
----
-
-
 ## SincNet
 
 먼길을 돌아왔습니다. 자 이제 SincNet을 살펴볼 시간입니다. 수식4는 입력 음성 신호에 대해 모델의 첫번째 레이어에서 SincNet 컨볼루션을 수행하는 걸 나타냅니다. $n$은 입력 음성 시그널의 $n$번째 샘플, $g$는 $n$번째 입력 시
