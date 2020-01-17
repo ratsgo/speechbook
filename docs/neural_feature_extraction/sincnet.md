@@ -10,7 +10,7 @@ permalink: /docs/neuralfe/sincnet
 {: .no_toc }
 
 
-뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다. SincNet은 벤지오 연구팀이 2019년 발표한 [SPEAKER RECOGNITION FROM RAW WAVEFORM WITH SINCNET](https://arxiv.org/pdf/1808.00158.pdf) 논문에서 제안됐는데요. 음성 특질 추출에 유리한 컨볼루션 신경망(Convolutional Neural Network)의 첫번째 레이어에 sinc function을 도입해 계산 효율성과 성능 두 마리 토끼를 잡아서 주목받았습니다.
+뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다. SincNet은 벤지오 연구팀이 2019년 발표한 [SPEAKER RECOGNITION FROM RAW WAVEFORM WITH SINCNET](https://arxiv.org/pdf/1808.00158.pdf) 논문에서 제안됐는데요. 음성 피처 추출에 유리한 컨볼루션 신경망(Convolutional Neural Network)의 첫번째 레이어에 싱크 함수(sinc function)를 도입해 계산 효율성과 성능 두 마리 토끼를 잡아서 주목받았습니다.
 {: .fs-4 .ls-1 .code-example }
 
 
@@ -25,7 +25,7 @@ permalink: /docs/neuralfe/sincnet
 
 ## 모델 개요
 
-SincNet 모델 개요는 다음과 같습니다. 저자들은 음성 피처 추출에 첫번째 레이어가 가장 중요하다고 보고 해당 레이어에 sinc function으로 컨볼루션 필터를 만들었습니다. 이들 필터들은 각각의 주파수 영역대 정보를 raw waveform으로부터 추출해 상위 레이어로 보냅니다. 
+SincNet 모델 개요는 다음과 같습니다. 저자들은 음성 피처 추출에 첫번째 레이어가 가장 중요하다고 보고 해당 레이어에 `싱크 함수(sinc function)`로 컨볼루션 필터를 만들었습니다. 이들 필터들은 원래 음성(raw waveform) 각각의 주파수 영역대 정보를 추출해 상위 레이어로 보냅니다. 
 
 ## **그림1** sincnet 
 {: .no_toc .text-delta }
@@ -53,7 +53,7 @@ $$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L
 
 ## **수식2** 컨볼루션 연산 예시
 {: .no_toc .text-delta }
-$$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L-1 }{ x\left[ l \right] \cdot h\left[ n-1 \right]  }$$
+$$y\left[ 0 \right] =x\left[ 0 \right] \cdot h\left[ 0 \right] \\ y\left[ 1 \right] =x\left[ 0 \right] \cdot h\left[ 1 \right] +x\left[ 1 \right] \cdot h\left[ 0 \right] \\ y\left[ 2 \right] =x\left[ 0 \right] \cdot h\left[ 2 \right] +x\left[ 1 \right] \cdot h\left[ 1 \right] +x\left[ 2 \right] \cdot h\left[ 0 \right] \\ y\left[ 3 \right] =x\left[ 0 \right] \cdot h\left[ 3 \right] +x\left[ 1 \right] \cdot h\left[ 2 \right] +x\left[ 2 \right] \cdot h\left[ 1 \right] $$
 
 
 이렇게만 보면 정말 알쏭달쏭하죠. 그림으로 이해해 봅시다. 일단 입력 wave 시그널이 그림2, 컨볼루션 필터가 그림3과 같다고 합시다. 
@@ -84,11 +84,21 @@ $$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/w3ODRrt.jpg" width="400px" title="source: imgur.com" />
 
+
+또다른 예시를 봅시다. 그림6과 같은 구형 함수를 주파수 도메인에서 입력 신호와 곱하면(multiplication) $f_1$과 $f_2$ 사이의 주파수만 남고 나머지는 없어질 겁니다(그림6의 상단). 이는 시간 도메인에서 Sinc function으로 입력 신호에 컨볼루션 연산을 수행한 결과에 대응합니다(그림6의 하단).
+
+
+## **그림6** 주파수 도메인의 곱셈 vs 시간 도메인의 컨볼루션 (2)
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/bVDA6Qo.jpg" width="400px" title="source: imgur.com" />
+
+
 ---
+
 
 ## Bandpass filter : Sinc Function
 
-우리는 음성 신호 $x$ 가운데 화자 인식 등 문제 해결에 도움이 되는 주파수 영역대(band)는 살리고, 나머지 주파수 영역대는 무시하길 원합니다. 이렇게 특정 주파수 영역대만 남기는 역할을 하는 함수를 `bandpass filter`라고 부릅니다. 주파수 도메인에서 이런 역할을 이상적으로 할 수 있는 필터의 모양은 Rectangular 형태일 겁니다. 그림7처럼 말이죠.
+우리는 음성 신호 $x$ 가운데 화자 인식 등 문제 해결에 도움이 되는 주파수 영역대(band)는 살리고, 나머지 주파수 영역대는 무시하길 원합니다. 이렇게 특정 주파수 영역대만 남기는 역할을 하는 함수를 `bandpass filter`라고 부릅니다. 주파수 도메인에서 이런 역할을 이상적으로 할 수 있는 필터의 모양은 사각형(Rectangular) 모양일 겁니다. 그림7처럼 말이죠.
 
 
 ## **그림7** Bandpass Filter
@@ -96,9 +106,7 @@ $$y\left[ n \right] =x\left[ n \right] \ast h\left[ n \right] =\sum _{ l=0 }^{ L
 <img src="https://i.imgur.com/FgzqVBY.jpg" width="400px" title="source: imgur.com" />
 
 
-이때 Sinc Function이라는게 제법 요긴하게 쓰입니다. **주파수(frequency) 도메인에서 Rectangular function으로 곱셈 연산**을 수행한 결과는 **시간(time) 도메인에서 Sinc Function으로 컨볼루션 연산**을 적용한 것과 동치(equivalent)이기 때문입니다. 
-
-SincNet 저자들이 첫번째 컨볼루션 레이어의 필터로 sinc function을 사용하고 모델 이름도 SincNet이라고 지은 이유입니다. 그 식은 수식3과 같습니다.
+이때 싱크 함수라는게 제법 요긴하게 쓰입니다. **주파수(frequency) 도메인에서 구형 함수(Rectangular function)으로 곱셈 연산**을 수행한 결과는 **시간(time) 도메인에서 싱크 함수로 컨볼루션 연산**을 적용한 것과 동치(equivalent)이기 때문입니다. SincNet 저자들이 첫번째 컨볼루션 레이어의 필터로 싱크 함수를 사용하고 모델 이름도 SincNet이라고 지은 이유입니다. 그 식은 수식3과 같습니다.
 
 
 ## **수식3** sinc function
@@ -106,41 +114,39 @@ SincNet 저자들이 첫번째 컨볼루션 레이어의 필터로 sinc function
 $$\text{ sinc } {\left( x \right)} ={ \sin { \left( x \right) }  }/{ x }$$ 
 
 
-조금 더 자세히 살펴보겠습니다. 특정 Sinc Function을 푸리에 변환(Fourier Transform)한 결과는 Rectangular function이 됩니다(수식4, 단 여기에서 sinc function은 [normalized sinc function](https://en.wikipedia.org/wiki/Sinc_function)). 이 Rectangular Function을 역푸리에 변환(Inverse Fourier Transform)하면 다시 Sinc Function이 됩니다. 
+조금 더 자세히 살펴보겠습니다. 싱크 함수를 푸리에 변환(Fourier Transform)한 결과는 구형 함수가 됩니다(수식4, 단 여기에서 싱크 함수는 [정규화된 싱크 함수\[normalized sinc function\]](https://en.wikipedia.org/wiki/Sinc_function)). 이 구형 함수를 역푸리에 변환(Inverse Fourier Transform)하면 다시 싱크 함수가 됩니다. 
 
-그 역도 성립합니다. 특정 Rectangular Function을 푸리에 변환한 결과는 Sinc Function이 됩니다(수식5). 이 Sinc Function을 역푸리에 변환을 하면 다시 Rectangular Function이 됩니다.
+그 역도 성립합니다. 구형 함수를 푸리에 변환한 결과는 싱크 함수가 됩니다(수식5). 이 싱크 함수를 역푸리에 변환을 하면 다시 구형 함수가 됩니다. 요컨대 **두 함수는 푸리에 변환을 매개로 한 쌍**을 이루고 있다는 이야기입니다. 그 관계는 다음 그림6과 같으며 구형 함수의 정의는 수식6과 같습니다.
 
-요컨대 **두 함수는 푸리에 변환을 매개로 한 쌍**을 이루고 있다는 이야기입니다. 그 관계는 다음 그림6과 같으며 Rectangular function의 정의는 수식6과 같습니다.
-
-## **그림6** Sinc/Rectangular function의 관계
+## **그림6** 싱크/구형 함수의 관계
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/6LnAejl.jpg" width="400px" title="source: imgur.com" />
 
-그림6 상단 각각의 봉우리를 `lobe`라고 합니다. 가장 높은 봉우리(main lobe)는 해당 컨볼루션 필터가 주로 잡아내는 주파수 영역대가 될 겁니다. 하지만 이것 말고도 작은 봉우리(side lobe)들이 많습니다. 이들 주파수 영역대도 컨볼루션 연산으로 살아남기 때문에 노이즈로 작용할 수 있습니다. 이를 `side lobe effect`라고 합니다.
+그림6 상단 각각의 봉우리를 `lobe`라고 합니다. 가장 높은 봉우리(main lobe)는 해당 컨볼루션 필터가 주로 잡아내는 주파수 영역대가 될 겁니다. 하지만 이것 말고도 작은 봉우리(side lobe)들이 많습니다. 이들 주파수 영역대도 컨볼루션 연산으로 살아남기 때문에 컨볼루션 연산을 적용한 이후에 노이즈로 작용할 수 있습니다. 이를 `side lobe effect`라고 합니다.
 {: .fs-4 .ls-1 .code-example }
 
-## **수식4** Sinc function을 푸리에 변환한 결과
+## **수식4** 싱크 함수의 푸리에 변환
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/2cZp0Ky.png" width="300px" title="source: imgur.com" />
 
-## **수식5** Rectangular function을 푸리에 변환한 결과
+## **수식5** 구형 함수의 푸리에 변환
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/hCoYfkY.png" width="400px" title="source: imgur.com" />
 
-## **수식6** Rectangular function
+## **수식6** 구형 함수
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/u1xY7P1.png" width="250px" title="source: imgur.com" />
 
 
-설명의 편의를 위해 `시간 도메인/sinc function`, `주파수 도메인/rectangular function`을 한 묶음으로 표현했으나 주파수 도메인에서 sinc function을, 시간 도메인에서 rectangular function을 정의할 수 있습니다. 이렇게 도메인이 바뀐 상태에서도 역시 sinc/rectangular function은 푸리에 변환을 매개로 한 쌍을 이룹니다.
+설명의 편의를 위해 `시간 도메인/싱크 함수`, `주파수 도메인/구형 함수`을 한 묶음으로 표현했으나 주파수 도메인에서 싱크 함수를, 시간 도메인에서 구형 함수를 정의할 수 있습니다. 이렇게 도메인이 바뀐 상태에서도 역시 싱크/구형 함수는 푸리에 변환을 매개로 한 쌍을 이룹니다.
 {: .fs-4 .ls-1 .code-example }
 
 ---
 
 
-## Gibbs phenomenon과 windowing
+## windowing
 
-수식4에서 알 수 있듯 Sinc Function에 푸리에 변환을 적용해 완전한 형태의 Rectangular function을 얻어내려면 해당 Sinc Function이 무한대의 길이를 가져야 합니다(적분 구간 참조). 그런데 우리는 컴퓨터 성능이 아무리 좋더라도 무한대 길이의 컨볼루션 필터를 사용할 수는 없습니다. 따라서 그림7의 상단과 같이 sinc function을 적당히 잘라서 사용해야 할 겁니다.
+수식4에서 알 수 있듯 싱크 함수에 푸리에 변환을 적용해 완전한 형태의 구형 함수를  얻어내려면 해당 싱크 함수가 무한한 길이를 가져야 합니다(적분 구간 참조). SincNet 저자들은 시간 도메인의 입력 음성 신호 $x$에 싱크 함수로 컨볼루션 연산을 적용하려고 하는데요. 여기에 문제가 하나 있습니다. 컴퓨터 성능이 아무리 좋더라도 무한한 길이의 싱크 함수(=컨볼루션 필터)를 사용할 수는 없습니다. 따라서 그림7의 상단과 같이 싱크 함수를 적당히 잘라서 사용해야 할 겁니다.
 
 
 ## **그림7** Filter Truncation
@@ -148,25 +154,52 @@ $$\text{ sinc } {\left( x \right)} ={ \sin { \left( x \right) }  }/{ x }$$
 <img src="https://i.imgur.com/MwqRypM.jpg" width="250px" title="source: imgur.com" />
 
 
-이렇게 필터를 인위적으로 자를 경우 문제가 하나 발생합니다. 그림7의 하단에서 관찰할 수 있는 것처럼 직각에 가까운 모양이 생기는 것이죠. 그런데 이렇게 뾰족한(sharp) 구간에서는 [깁스 현상(Gibbs phenomenon)](https://en.wikipedia.org/wiki/Gibbs_phenomenon)이 발생한다고 합니다. 그림8을 보겠습니다.
+싱크 함수를 유한한 길이로 자르고 이를 푸리에 변환을 하면 그림8의 하단과 같은 모양이 됩니다. 이상적인 bandpass filter의 모양(사각형)에서 점점 멀어지게 되는 것이죠. 이렇게 되면 우리가 원하는 주파수 영역대 정보는 덜 캐치하게 되고, 버려야 하는 주파수 영역대 정보도 캐치하게 됩니다.
 
-## **그림8** Gibbs phenomenon
+
+## **그림8** 싱크 함수의 길이별 비교
 {: .no_toc .text-delta }
+<img src="https://i.imgur.com/dPiXPQ6.png" width="350px" title="source: imgur.com" />
+
+
+이러한 문제를 해결하기 위해 SincNet 저자들은 `윈도우(window)` 기법을 적용했습니다. 싱크 함수를 특정 길이로 자르고 해당 필터에 윈도우 함수값을 곱해 양끝을 스무딩한다는 개념입니다. SincNet 저자들은 윈도우 기법으로 해밍 윈도우(Hamming window)를 사용햇습니다. 수식7과 같습니다.
+
+## **수식7** Hamming Window
+{: .no_toc .text-delta }
+$$w\left[ n \right] =0.54-0.46\cdot \cos { \left( \frac { 2\pi n }{ L }  \right)  }$$
+<br>
+<img src="https://i.imgur.com/tHPxKTg.png" width="350px" title="source: imgur.com" />
+
+
+그림9는 해밍 윈도우를 푸리에 변환한 결과입니다. 중심 주파수 영역대는 잘 캐치하고 그 외 주파수 영역대는 무시하게 됩니다. 다시 말해 유한한 길이의 싱크 함수를 사용하더라도 해밍 윈도우 기법을 사용하면 원하는 주파수 영역대 정보를 잘 살리고, 버려야 할 주파수 영역대 정보는 잘 버리는 보완책이 될 수 있다는 이야기입니다.
+
+
+## **그림9** 해밍 윈도우의 푸리에 변환
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/Hsi7qpn.png" width="350px" title="source: imgur.com" />
+
+
+
+**입력 신호에 대한 windowing**
+<br>
+본래 윈도우라는 개념은 시간 도메인에서의 입력 신호 $x$에 시행하는 것이 정석입니다. 음성 신호는 그 길이가 매우 길기 때문에 프레임별로 잘라서 처리를 합니다. 그런데 입력 신호를 인위적으로 자를 경우 문제가 발생합니다. 아래 그림에서 관찰할 수 있는 것처럼 자른 부분에서 직각 신호(square wave)가 생기는 것이죠. 
+<br>
+<img src="https://i.imgur.com/FI2dGV7.jpg" width="250px" title="source: imgur.com" />
+<br>
+이렇게 뾰족한(sharp) 구간에서는 [깁스 현상(Gibbs phenomenon)](https://en.wikipedia.org/wiki/Gibbs_phenomenon)이 발생한다고 합니다. 깁스 현상을 이해해보기 위해 아래 그림을 보겠습니다.
+<br>
 <img src="https://i.imgur.com/tRbgp3x.png" width="250px" title="source: imgur.com" />
-
-
-그림8의 첫번째 그림은 서로 다른 주기(cycle)를 가진 사인(sin) 함수 다섯개를 합해서 만든 그래프입니다. 세번째 그림은 125개를 썼습니다. 그런데 자세히 보시면 굴절되는 구간에서 뾰족하게 튀어나온 부분을 확인할 수 있습니다. '무한대 갯수의 `사인함수(=주파수 성분)`를 더하더라도 직각 굴절 부분을 완벽하게 표현할 수 없다'가 깁스 현상의 핵심 개념입니다.
-
-이와 관련해 그림7을 보면 필터를 자르는 과정에서 샤프한 구간이 생겼습니다. 이 컨볼루션 필터로 컨볼루션 연산을 수행하게 되면 입력 신호에 고주파 성분(갑자기 튀거나 작아지는..)이 생길 수밖에 없습니다. 이 입력 신호를 주파수 영역에서 잡아내려면 문제가 생깁니다. 이에 끝부분을 스무딩하게 만듭니다. 그 유명한 해밍 윈도우입니다.
-
-## **그림9** Hamming Window
-{: .no_toc .text-delta }
-
-
-개념적으로는 입력에 윈도윙을 적용하고 컨볼루션 필터에 밀어 넣는다
+<br>
+위의 첫번째 그림은 서로 다른 주기(cycle)를 가진 사인(sin) 함수 다섯 개를 합해서 만든 그래프입니다. 세번째 그림은 125개를 썼습니다. 자세히 보시면 사인 함수를 많이 쓸 수록 직각에 가까운 신호를 만들어낼 수는 있지만, 굴절되는 구간에서 여전히 뾰족하게 튀어나온 부분을 확인할 수 있습니다. **주파수 성분(=사인 함수)를 무한히 더해야 직각 신호를 완벽하게 표현할 수 있다**가 깁스 현상의 핵심 개념입니다.
+<br>
+입력 신호를 프레임 단위로 자르는 과정에서 직각 신호가 생겼습니다. 결과적으로 입력 신호에 고주파 성분(신호가 갑자기 튀거나 작아지는 등)이 생깁니다. 이런 문제를 해결하기 위해 `윈도우(window)`가 제안됐습니다. 입력 신호에 윈도우를 곱해 신호 양 끝부분을 스무딩하는 것입니다. 
+<br>
+SincNet 저자들은 컨볼루션 필터(=싱크 함수)에 해밍 윈도우를 적용했는데요. 컨볼루션 연산 식을 보면 **(1) 컨볼루션 필터에 해밍 윈도우 적용 (2) 입력 신호에 해밍 윈도우 적용** 두 가지 방식이 수치 연산 면에서는 정확하게 동치임을 확인할 수 있습니다.
 {: .fs-4 .ls-1 .code-example }
 
+
 ---
+
 
 ## Sinc/Rectangular function의 관계
 
@@ -183,20 +216,7 @@ Sinc Function은 시간 도메인, Rectangular function은 주파수 도메인�
 
 
 
-그러면 이해가 상대적으로 쉬운 주파수 도메인 기준으로 생각을 해볼까요? Rectangular function이 그림6과 같은 음성 신호가 있다고 가정해 봅시다. 그럼 Rectangular function을 주파수 도메인에서 입력 신호와 곱하면(multiplication) $f_1$과 $f_2$ 사이의 주파수만 남고 나머지는 없어질 겁니다(그림6의 상단). 이는 시간 도메인에서 Sinc function으로 입력 신호에 컨볼루션 연산을 수행한 결과에 대응합니다(그림6의 하단).
 
-
-## **그림6** 주파수 도메인의 곱셈 vs 시간 도메인의 컨볼루션 (1)
-{: .no_toc .text-delta }
-<img src="https://i.imgur.com/bVDA6Qo.jpg" width="450px" title="source: imgur.com" />
-
-
-만일 그림7처럼 Sinc/Rectangular function이 극단적인 형태라면 입력 신호가 걸러지지 않고 그대로 리턴이 될 겁니다.
-
-
-## **그림6** 주파수 도메인의 곱셈 vs 시간 도메인의 컨볼루션 (2)
-{: .no_toc .text-delta }
-<img src="https://i.imgur.com/w3ODRrt.jpg" width="450px" title="source: imgur.com" />
 
 
 ---
@@ -229,10 +249,6 @@ $${ f }_{ 1 }^{ abs }=\left| { f }_{ 1 } \right| \\ { f }_{ 2 }^{ abs }={ f }_{ 
 ## **수식6** constraint
 {: .no_toc .text-delta }
 $${ g }_{ w }\left[ n,{ f }_{ 1 },{ f }_{ 2 } \right] ={ g }_{ w }\left[ n,{ f }_{ 1 },{ f }_{ 2 } \right] \cdot w\left[ n \right]$$
-
-## **수식5** Hamming window
-{: .no_toc .text-delta }
-$$w\left[ n \right] =0.54-0.46\cdot \cos { \left( \frac { 2\pi n }{ L }  \right)  }$$
 
 
 ## **코드1** Hamming window
