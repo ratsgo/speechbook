@@ -517,3 +517,24 @@ sincnet_result = F.conv1d(waveforms, filters, stride=stride,
                           padding=padding, dilation=dilation,
                           bias=None, groups=1)
 ```
+
+
+---
+
+
+## Experiment
+
+SincNet 저자들은 화자 인식 태스크에 이 모델을 적용했습니다. 그림16의 우측(TIMIT 데이터셋)을 보면 기존 CNN 대비 수렴이 빠른 점을 확인할 수 있습니다. 그림16의 좌측을 보면 SincNet 필터들이 기존 CNN 필터들 대비 중요 음성 특질 중 하나인 포만트(Formant) 주파수를 잘 잡아내고, 나머지 불필요한 주파수 영역대는 확실히 무시하는 점을 볼 수 있습니다.
+
+
+## **그림16** SincNet 실험 결과 (1)
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/yZzkEXA.png" width="400px" title="source: imgur.com" />
+
+
+그림17은 Librispeech 데이터셋을 학습한 결과입니다. 첫번째 행은 시간 도메인, 두번째 행은 주파수 도메인에 대응합니다. SincNet 필터들이 이상적인 형태의 bandpass filter 모양에 가까운 걸 확인할 수 있습니다. 즉 low/high cut-off frequency를 학습해 해당 주파수 영역대 정보를 잘 캐치하고 나머지 영역대를 무시한다는 이야기입니다. 저자들은 SincNet 성능과 해석력(interpretability)이 기존 CNN 대비 좋다고 강조하고 있습니다.
+
+
+## **그림17** SincNet 실험 결과 (2)
+{: .no_toc .text-delta }
+<img src="https://i.imgur.com/E8jQx5p.png" width="400px" title="source: imgur.com" />
