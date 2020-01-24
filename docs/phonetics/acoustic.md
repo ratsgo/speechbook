@@ -277,6 +277,16 @@ $$m=1127\ln { \left( 1+\frac { f }{ 700 }  \right)  }$$
 <img src="https://i.imgur.com/IJpzp2L.png" width="400px" title="source: imgur.com" />
 
 
+다음은 두 개의 소스와 두 개의 필터로 서로 다른 소리를 내는 예시입니다. 소스가 다르면 음색이나 피치가 달라지고, 필터가 다르면 모음의 종류가 달라지는 것을 확인할 수 있습니다.
+
+
+## **표1** The Source-Filter Model (3) ([출처](http://splab.net/APD/G500/index-e.html))
+{: .no_toc .text-delta }
+
+|구분|필터 /a/|필터 /i/|
+|---|---|---|
+|소스1|<audio class="audio" controls preload="none"><source src="https://github.com/ratsgo/speechbook/blob/master/docs/phonetics/a_p1.wav?raw=true"></audio>|<audio class="audio" controls preload="none"><source src="https://github.com/ratsgo/speechbook/blob/master/docs/phonetics/i_p1.wav?raw=true"></audio>|
+|소스2|<audio class="audio" controls preload="none"><source src="https://github.com/ratsgo/speechbook/blob/master/docs/phonetics/a_p2.wav?raw=true"></audio>|<audio class="audio" controls preload="none"><source src="https://github.com/ratsgo/speechbook/blob/master/docs/phonetics/i_p2.wav?raw=true"></audio>|
 
 ---
 
@@ -285,6 +295,7 @@ $$m=1127\ln { \left( 1+\frac { f }{ 700 }  \right)  }$$
 - [모두의연구소 음성인식 부트캠프](https://home.modulabs.co.kr/product/%ec%9d%8c%ec%84%b1-%ec%9d%b8%ec%8b%9d-%eb%b6%80%ed%8a%b8%ec%ba%a0%ed%94%84/)
 - [Speech and Language Processing (3rd ed. draft)](https://web.stanford.edu/~jurafsky/slp3/)
 - [정보통신기술용어해설](http://www.ktword.co.kr/index.php)
+- [splab.net](http://splab.net/APD/G500/index-e.html)
 - [위키백과](https://ko.wikipedia.org)
 
 ---
