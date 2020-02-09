@@ -117,7 +117,7 @@ $$\vec{X} = W \cdot \vec{x} \\ W_{kn} = e^{-i~2\pi~k~n~/~N}$$
 <img src="https://i.imgur.com/HBeaeDU.png" width="500px" title="source: imgur.com" />
 
 
-행렬 $W$를 DFT 행렬(Discrete Fourier Transform Matrix)이라고도 합니다. 그 정의는 수식4와 같습니다. 단 $\omega = \exp{\(-2\pi i/N\)}$. 수식5는 시간 도메인의 원래 음성 신호가 8개일 때 이산 푸리에 변환을 수행하기 위한 DFT 행렬을 나타냅니다. 수식5에서도 알 수 있듯 DFT 행렬은 [켤레 전치](https://ko.wikipedia.org/wiki/%EC%BC%A4%EB%A0%88_%EC%A0%84%EC%B9%98)가 역행렬(inverse matrix)와 같은 복소수 행렬입니다. 
+행렬 $W$를 DFT 행렬(Discrete Fourier Transform Matrix)이라고도 합니다. 그 정의는 수식4와 같습니다. 단 $\omega = \exp{\(-2\pi i/N\)}$. 수식5는 시간 도메인의 원래 음성 신호가 8개일 때 이산 푸리에 변환을 수행하기 위한 DFT 행렬을 나타냅니다. 수식5에서도 알 수 있듯 DFT 행렬은 [켤레 전치](https://ko.wikipedia.org/wiki/%EC%BC%A4%EB%A0%88_%EC%A0%84%EC%B9%98)가 역행렬(inverse matrix)와 같은 복소수 행렬, 즉 유니타리 행렬(unitary matrix)입니다. 
 
 
 ## **수식4** DFT matrix
