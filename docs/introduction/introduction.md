@@ -30,6 +30,7 @@ permalink: /docs/introduction
 
 ## **수식1** Automatic Speech Recognition (1)
 {: .no_toc .text-delta }
+
 $$\DeclareMathOperator*{\argmax}{argmax} \hat { Y } =\argmax_{ Y }{ P(Y|X) }$$
 
 
@@ -39,6 +40,7 @@ $P(Y\|X)$를 바로 추정하는 모델을 구축하는 것이 가장 이상적�
 
 ## **수식2** Automatic Speech Recognition (2)
 {: .no_toc .text-delta }
+
 $$\hat { Y } =\argmax_{ Y }{ \frac { P(X|Y)P(Y) }{ P(X) }  }$$
 
 
@@ -47,6 +49,7 @@ $$\hat { Y } =\argmax_{ Y }{ \frac { P(X|Y)P(Y) }{ P(X) }  }$$
 
 ## **수식3** ASR inference
 {: .no_toc .text-delta }
+
 $$\frac { P(X|{ Y }_{ 1 })P({ Y }_{ 1 }) }{ P(X) } >\frac { P(X|{ Y }_{ 2 })P({ Y }_{ 2 }) }{ P(X) }$$
 
 
@@ -55,6 +58,7 @@ $$\frac { P(X|{ Y }_{ 1 })P({ Y }_{ 1 }) }{ P(X) } >\frac { P(X|{ Y }_{ 2 })P({ 
 
 ## **수식4** Automatic Speech Recognition (3)
 {: .no_toc .text-delta }
+
 $$\hat { Y } =\argmax_{ Y }{ P(X|Y)P(Y) }$$
 
 
