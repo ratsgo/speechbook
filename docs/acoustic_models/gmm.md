@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Gaussian Mixture Model
-nav_order: 2
+nav_order: 3
 parent: Acoustic Models
 permalink: /docs/am/gmm
 ---

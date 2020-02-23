@@ -81,6 +81,6 @@ high_freq_mel = (2595 * np.log10(1 + (sample_rate
 ## References
 
 - [Speech Processing for Machine Learning: Filter banks, Mel-Frequency Cepstral Coefficients (MFCCs) and What's In-Between](https://haythamfayek.com/2016/04/21/speech-processing-for-machine-learning.html)
-
+- [김형석, Mel-Frequency Cepstral Coefficients, 모두의연구소 음성인식 부트캠프, 2020. 2. 1.](https://home.modulabs.co.kr/product/%ec%9d%8c%ec%84%b1-%ec%9d%b8%ec%8b%9d-%eb%b6%80%ed%8a%b8%ec%ba%a0%ed%94%84)
 
 ---
