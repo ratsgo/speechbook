@@ -52,7 +52,7 @@ $${ \alpha  }_{ ij }=\frac { \text{number of transitions from state i to state j
 
 ## **수식3** 전이 확률 분포
 {: .no_toc .text-delta }
-<img src="https://i.imgur.com/UU7drS6.png" width="350px" title="source: imgur.com" />
+<img src="https://i.imgur.com/8pQ2o80.png" width="350px" title="source: imgur.com" />
 
 
 마지막으로 방출확률을 구해보겠습니다. 예시로 $P$(3\|HOT)을 계산해 봅시다. 우선 전체 데이터에서 상태가 `HOT`이 몇 번 등장했는지(number of times in `HOT`) 셉니다. 총 4회(`HOT`은 1번 데이터에 2회, 3번 데이터에 2회)입니다. 이번엔 상태가 `HOT`일 때 관측치가 3인 경우가 몇 번 있었는지 셉니다. 총 3회(1번 데이터 첫번째 step, 1번 데이터 두번째 step, 3번 데이터 세번째 step)입니다. 수식4에 따라 $P$(3\|HOT)를 구하면 그 값은 $3/4$가 됩니다. 이를 확장해서 모두 구하면 수식5와 같습니다.
