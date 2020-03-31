@@ -76,7 +76,13 @@ $${ \alpha  }_{ t }\left( s \right) =\sum _{ \pi \in { N }^{ T }: \cal{B} \left(
 
 ## **수식4** Forward Computation Example
 {: .no_toc .text-delta }
-$${ \alpha  }_{ 3 }\left( 4 \right) =p\left( "-he" \right) +p\left( "hhe" \right) +p\left( "h-e" \right) +p\left( "hee" \right) \\ ={ y }_{ - }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ - }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ e }^{ 2 }\cdot { y }_{ e }^{ 3 }$$
+
+$$
+\begin{align*}
+{ \alpha  }_{ 3 }\left( 4 \right) & = p\left( "-he" \right) +p\left( "hhe" \right) +p\left( "h-e" \right) +p\left( "hee" \right) \\ 
+& = { y }_{ - }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ - }^{ 2 }\cdot { y }_{ e }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ e }^{ 2 }\cdot { y }_{ e }^{ 3 }
+\end{align*}
+$$
 
 
 ## **수식5** Dynamic Programming Example
@@ -106,19 +112,6 @@ $${ \alpha  }_{ 3 }\left( 4 \right) =p\left( "-he" \right) +p\left( "hhe" \right
 $${ \alpha  }_{ t }\left( s \right) =\left\{ { \alpha  }_{ t-1 }\left( s \right) +{ \alpha  }_{ t-1 }\left( s-1 \right)  \right\} { y }_{ { l' }_{ s } }^{ t }$$
 
 $${ \alpha  }_{ t }\left( s \right) =\left\{ { \alpha  }_{ t-1 }\left( s \right) +{ \alpha  }_{ t-1 }\left( s-1 \right) +{ \alpha  }_{ t-1 }\left( s-2 \right)  \right\} { y }_{ { l' }_{ s } }^{ t }$$
-
-$$
-\documentclass{article}
-\usepackage{amsmath}
-\begin{document} 
-	\begin{equation}
-	  f(x)=\begin{cases}
-	    1, & \text{if $x<0$}.\\
-	    0, & \text{otherwise}.
-	  \end{cases}
-	\end{equation}
-\end{document}
-$$
 
 
 ---
@@ -150,15 +143,53 @@ $$\beta _{ t }\left( s \right) =\left\{ { \beta  }_{ t+1 }\left( s \right) +\bet
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/ctsh5p9.png" width="400px" title="source: imgur.com" />
 
+## **수식3** Forward Probability Example
+{: .no_toc .text-delta }
+
+$${ \alpha  }_{ 3 }\left( 2 \right) =p\left( "--h" \right) +p\left( "-hh" \right) +p\left( "hhh" \right) \\ ={ y }_{ - }^{ 1 }\cdot { y }_{ - }^{ 2 }\cdot { y }_{ h }^{ 3 }+{ y }_{ - }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ h }^{ 3 }+{ y }_{ h }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ h }^{ 3 }$$
+
+
+## **수식4** Backward Probability Example
+{: .no_toc .text-delta }
+
+$$\beta _{ 3 }\left( 2 \right) =p\left( "hel-lo" \right) \\ ={ y }_{ h }^{ 3 }\cdot { y }_{ e }^{ 4 }\cdot { y }_{ l }^{ 5 }\cdot { y }_{ - }^{ 6 }\cdot { y }_{ l }^{ 7 }\cdot { y }_{ o }^{ 8 }$$
+
+
+
+## **수식4** Forward/Backward Probability Example
+{: .no_toc .text-delta }
+
+$${ \alpha  }_{ 3 }\left( 2 \right) \cdot \beta _{ 3 }\left( 2 \right) =\left\{ p\left( "--hel-lo" \right) +p\left( "-hhel-lo" \right) +p\left( "hhhel-lo" \right)  \right\} { y }_{ h }^{ 3 }\\ ={ y }_{ - }^{ 1 }\cdot { y }_{ - }^{ 2 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ e }^{ 4 }\cdot { y }_{ l }^{ 5 }\cdot { y }_{ - }^{ 6 }\cdot { y }_{ l }^{ 7 }\cdot { y }_{ o }^{ 8 }+{ y }_{ - }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ e }^{ 4 }\cdot { y }_{ l }^{ 5 }\cdot { y }_{ - }^{ 6 }\cdot { y }_{ l }^{ 7 }\cdot { y }_{ o }^{ 8 }+{ y }_{ h }^{ 1 }\cdot { y }_{ h }^{ 2 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ h }^{ 3 }\cdot { y }_{ e }^{ 4 }\cdot { y }_{ l }^{ 5 }\cdot { y }_{ - }^{ 6 }\cdot { y }_{ l }^{ 7 }\cdot { y }_{ o }^{ 8 }$$
+
+
+## **수식4** Complete Path Probability Example
+{: .no_toc .text-delta }
+
+$$p\left( "--hel-lo" \right) +p\left( "-hhel-lo" \right) +p\left( "hhhel-lo" \right) =\frac { { \alpha  }_{ 3 }\left( 2 \right) \cdot \beta _{ 3 }\left( 2 \right)  }{ { y }_{ h }^{ 3 } }$$
+
+
 ---
 
 
 ## Likelihood Computation
 
 
+## **수식11** Likelihood Computation
+{: .no_toc .text-delta }
+
+$$p\left( l|x \right) =\sum _{ s=1 }^{ |l'| }{ \frac { { \alpha  }_{ t }\left( s \right) \cdot \beta _{ t }\left( s \right)  }{ { y }_{ { l' }_{ s } }^{ t } }  } $$
+
+
 ## **그림11** Likelihood Computation Example
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/IYSiNlx.png" width="400px" title="source: imgur.com" />
+
+
+## **수식11** Likelihood Computation Example
+{: .no_toc .text-delta }
+
+$$p\left( "hello"|x \right) =\frac { { \alpha  }_{ 3 }\left( h \right) \cdot \beta _{ 3 }\left( h \right)  }{ { y }_{ h }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( - \right) \cdot \beta _{ 3 }\left( - \right)  }{ { y }_{ - }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( e \right) \cdot \beta _{ 3 }\left( e \right)  }{ { y }_{ e }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( - \right) \cdot \beta _{ 3 }\left( - \right)  }{ { y }_{ - }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( l \right) \cdot \beta _{ 3 }\left( l \right)  }{ { y }_{ l }^{ 3 } } $$
+
 
 ---
 
@@ -166,13 +197,48 @@ $$\beta _{ t }\left( s \right) =\left\{ { \beta  }_{ t+1 }\left( s \right) +\bet
 ## Gradient Computation
 
 
+## **수식11** Gradient Computation (1)
+{: .no_toc .text-delta }
+
+$$\frac { \partial \ln { \left( p\left( l|x \right)  \right)  }  }{ \partial { y }_{ k }^{ t } } =\frac { 1 }{ p\left( l|x \right)  } \frac { \partial p\left( l|x \right)  }{ \partial { y }_{ k }^{ t } } $$
+
+
+## **수식11** Gradient Computation (2)
+{: .no_toc .text-delta }
+
+$$\frac { \partial p\left( l|x \right)  }{ \partial { y }_{ k }^{ t } } =\frac { 1 }{ { { y }_{ k }^{ t } }^{ 2 } } \sum _{ s\in lab\left( l,k \right)  }^{  }{ { \alpha  }_{ t }\left( s \right) \cdot \beta _{ t }\left( s \right)  }$$
+
+
 ## **그림12** Gradient Computation Example (1)
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/Zhscxzw.png" width="400px" title="source: imgur.com" />
 
+
+## **수식12** Gradient Computation Example (1)
+{: .no_toc .text-delta }
+
+$$p\left( "hello"|x \right) =\frac { { \alpha  }_{ 3 }\left( h \right) \cdot \beta _{ 3 }\left( h \right)  }{ { y }_{ h }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( - \right) \cdot \beta _{ 3 }\left( - \right)  }{ { y }_{ - }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( e \right) \cdot \beta _{ 3 }\left( e \right)  }{ { y }_{ e }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( - \right) \cdot \beta _{ 3 }\left( - \right)  }{ { y }_{ - }^{ 3 } } +\frac { { \alpha  }_{ 3 }\left( l \right) \cdot \beta _{ 3 }\left( l \right)  }{ { y }_{ l }^{ 3 } } $$
+
+## **수식12** Gradient Computation Example (1)
+{: .no_toc .text-delta }
+
+
+$$\frac { \partial p\left( "hello"|x \right)  }{ \partial { y }_{ h }^{ 3 } } =\frac { 1 }{ { { y }_{ h }^{ 3 } }^{ 2 } } \frac { { \alpha  }_{ 3 }\left( h \right) \cdot \beta _{ 3 }\left( h \right)  }{ { y }_{ h }^{ 3 } } $$
+
+
 ## **그림13** Gradient Computation Example (2)
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/HgVRXpa.png" width="400px" title="source: imgur.com" />
+
+## **수식12** Gradient Computation Example (2)
+{: .no_toc .text-delta }
+
+$$p\left( "hello"|x \right) =\frac { { \alpha  }_{ 5 }\left( l \right) \cdot \beta _{ 5 }\left( l \right)  }{ { y }_{ l }^{ 5 } } +\frac { { \alpha  }_{ 5 }\left( - \right) \cdot \beta _{ 5 }\left( - \right)  }{ { y }_{ - }^{ 5 } } +\frac { { \alpha  }_{ 5 }\left( l \right) \cdot \beta _{ 5 }\left( l \right)  }{ { y }_{ l }^{ 5 } } $$
+
+## **수식12** Gradient Computation Example (2)
+{: .no_toc .text-delta }
+
+$$\frac { \partial p\left( "hello"|x \right)  }{ \partial { y }_{ l }^{ 5 } } =\frac { 1 }{ { { y }_{ l }^{ 5 } }^{ 2 } } \left( \frac { { \alpha  }_{ 5 }\left( l \right) \cdot \beta _{ 5 }\left( l \right)  }{ { y }_{ l }^{ 5 } } +\frac { { \alpha  }_{ 5 }\left( l \right) \cdot \beta _{ 5 }\left( l \right)  }{ { y }_{ l }^{ 5 } }  \right) $$
 
 ---
 
