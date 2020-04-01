@@ -25,7 +25,7 @@ permalink: /docs/neuralam/ctc
 
 음성 인식 모델을 학습하려면 음성(피처) 프레임(그림1에서 첫번째 줄) 각각에 레이블 정보가 있어야 합니다. 음성 프레임 각각이 어떤 음소인지 정답이 주어져 있어야 한다는 이야기입니다. 그런데 [MFCC](https://ratsgo.github.io/speechbook/docs/fe/mfcc) 같은 음성 피처는 짧은 시간 단위(대개 25ms)로 잘게 쪼개서 만들게 되는데요. 음성 프레임 각각에 레이블(음소)을 달아줘야 하기 때문에 다량의 레이블링을 해야 하고(고비용) 인간은 이같이 짧은 구간의 음성을 분간하기 어려워 레이블링 정확도가 떨어집니다.
 
-**Connectionist Temporal Classification(CTC)**는 입력 음성 프레임 시퀀스와 타겟 단어/음소 시퀀스 간에 명시적인 얼라인먼트(alignment) 정보 없이도 음성 인식 모델을 학습할 수 있도록 고안됐습니다. 다시 말해 입력 프레임 각각에 레이블을 달아놓지 않아도 음성 인식 모델을 학습할 수 있다는 것입니다. 물론 음성 인식 태스크가 아니어도 소스에서 타겟으로 변환하는 모든 시퀀스 분류 과제에 CTC를 적용할 수 있습니다(예: 손글씨 실시간 인식, 이미지 프레임 시퀀스를 단어 시퀀스로 변환).
+[Connectionist Temporal Classification(CTC)](https://www.cs.toronto.edu/~graves/icml_2006.pdf)는 입력 음성 프레임 시퀀스와 타겟 단어/음소 시퀀스 간에 명시적인 얼라인먼트(alignment) 정보 없이도 음성 인식 모델을 학습할 수 있도록 고안됐습니다. 다시 말해 입력 프레임 각각에 레이블을 달아놓지 않아도 음성 인식 모델을 학습할 수 있다는 것입니다. 물론 음성 인식 태스크가 아니어도 소스에서 타겟으로 변환하는 모든 시퀀스 분류 과제에 CTC를 적용할 수 있습니다(예: 손글씨 실시간 인식, 이미지 프레임 시퀀스를 단어 시퀀스로 변환).
 
 
 ## **그림1** CTC Input
@@ -402,7 +402,32 @@ $$\frac { \partial p\left( \text{"hello"} | \mathbf{x} \right)  }{ \partial { y 
 ---
 
 
-## Normalization
+## Rescaling
+
+지금까지 CTC에 대한 핵심적인 설명을 마쳤습니다. 단 CTC 저자에 따르면 앞의 챕터 방식대로 전방확률과 후방확률을 계산하게 되면 그 값이 너무 작아져 언더플로(underflow) 문제가 발생한다고 합니다. 이에 수식24와 수식25와 같은 방식으로 전방확률과 후방확률 값을 리스케일링(rescaling)해 줍니다. 그래디언트 역시 리스케일한 전방/후방확률을 기준으로 계산하게 됩니다. 자세한 내용은 [원 논문](https://www.cs.toronto.edu/~graves/icml_2006.pdf)을 참고하시면 좋을 것 같습니다.
+
+
+## **수식24** Rescaled Forward Probability
+{: .no_toc .text-delta }
+
+$$
+\begin{align*}
+{ C }_{ t }=&\sum _{ s }^{  }{ { \alpha  }_{ t }\left( s \right)  } \\ 
+{ \hat { \alpha  }  }_{ t }\left( s \right) =& \frac { { \alpha  }_{ t }\left( s \right)  }{ { C }_{ t } } 
+\end{align*}
+$$
+
+
+## **수식25** Rescaled Backward Probability
+{: .no_toc .text-delta }
+
+$$
+\begin{align*}
+{ D }_{ t }=&\sum _{ s }^{  }{ { \beta  }_{ t }\left( s \right)  } \\ 
+{ \hat { \beta  }  }_{ t }\left( s \right) =& \frac { { \beta  }_{ t }\left( s \right)  }{ { D }_{ t } } 
+\end{align*}
+$$
+
 
 ---
 
@@ -410,15 +435,21 @@ $$\frac { \partial p\left( \text{"hello"} | \mathbf{x} \right)  }{ \partial { y 
 ## Decoding
 
 
+CTC로 학습한 모델의 출력은 확률 벡터 시퀀스이므로 그 결과를 적절히 디코딩(decoding)해 주어야 합니다. 가장 간단한 방법은 **Best Path Decoding**이라는 기법입니다. 시간 축을 따라 가장 확률값이 높은 레이블을 디코딩 결과로 출력하는 방법입니다. 
+
+그림14는 CTC로 학습한 모델이 출력한 확률 벡터 시퀀스를 시간 축을 따라 쭉 이어붙인 것입니다. 가로축은 시간(time), 세로축은 음소를 나타냅니다. 가로축을 보니 입력 음성 피처 시퀀스의 길이가 30이네요. Best Path Decoding 방식으로 그림14를 디코딩하면 `---B-OO--XXX-__--BBUUNN-NI--->`이 됩니다.
+
 ## **그림14** Best Path Decoding
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/TWnm2Vi.png" title="source: imgur.com" />
 
+**Prefix Decoding**은 매 스텝마다 가장 확률값이 높은 prefix를 디코딩 결과로 출력하는 것입니다. 그림 15와 같습니다. 그림15의 첫번째 스텝에서 가장 확률값이 높은 prefix는 `X`입니다. 그런데 `X`의 확률값(0.7)은 두번째 스텝에서 각 상태가 지니는 확률의 합($p(X)=0.1$, $p(Y)=0.5$, $p(e)=0.1$)과 같습니다. `X`의 확률값(0.7)은 $t=1$ 시점에 상태가 `X`일 확률을 가리키는데요. 이는 앞서 설명한 Forward/Backward Algorithm으로 계산 가능합니다. 어쨌든 그림15와 같은 예시일 때 Prefix Decoding 결과는 `XYe`가 됩니다.
 
 ## **그림15** Prefix Decoding
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/bjbfVAV.png" width="200px" title="source: imgur.com" />
 
+**Beam Search**는 매 스텝마다 가장 확률이 높은 후보 시퀀스를 beam 크기만큼 남겨서 디코딩하는 방법입니다. 그림16은 beam 크기가 3일 때 Beam Search의 일반적인 디코딩 과정을 도식적으로 나타내고 있습니다. 시간이 아무리 흘려도 살아남는 후보 시퀀스 갯수는 beam 크기가 됩니다. 그림17과 그림18은 CTC로 학습한 모델의 Beam Search 과정을 나타냅니다. 일반적인 Beam Search와 거의 유사하나 디코딩 과정에서 여러 번 등장한 음소를 합치거나 `blank` 등을 적절히 처리해 줍니다.
 
 ## **그림16** Beam Search (1)
 {: .no_toc .text-delta }
@@ -441,9 +472,16 @@ $$\frac { \partial p\left( \text{"hello"} | \mathbf{x} \right)  }{ \partial { y 
 ## Properties
 
 
-## **그림20** Activations
+그림19는 프레임 단위 레이블로 학습한 음성 인식 모델과 CTC로 학습한 모델 간 차이를 나타내는 그림으로 CTC 원저자가 작성한 것입니다. 저자에 따르면 `dh`라는 음소의 경우 프레임 단위 모델은 정답을 잘 맞췄지만 얼라인먼트가 잘 되지 않았습니다. 그에 반해 CTC 모델은 얼라인먼트가 잘 되어 있는 걸 확인할 수 있습니다. 아울러 CTC 모델은 프레임 단위 모델 대비 음소 확률 분포가 spiky합니다.
+
+
+## **그림19** Activations
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/jQwZHyh.png" title="source: imgur.com" />
+
+
+하지만 개인적으로는 그림19가 역설적이게도 CTC 모델의 단점을 드러낸 모델이 아닌가 싶습니다. 입력 음성 피처 시퀀스별로 레이블을 부여(Forced Alignment)하는 태스크에는 CTC가 제대로 작동하지 않을 염려가 있다고 생각되기 때문입니다. 실제로 CTC 모델이 `s` 음소를 인식 결과로 리턴할 수 있는 구간은 프레임 단위 모델 대비 짧은 편입니다. 
+
 
 ---
 
