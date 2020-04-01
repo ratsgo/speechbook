@@ -1,7 +1,7 @@
 ---
 layout: default
 title: End-to-End SLU
-nav_order: 3
+nav_order: 4
 parent: Neural Acoustic Models
 permalink: /docs/neuralam/e2eslu
 ---
