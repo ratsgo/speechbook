@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Deep Speech
-nav_order: 2
+nav_order: 3
 parent: Neural Acoustic Models
 permalink: /docs/neuralam/deepspeech
 ---
