@@ -461,7 +461,7 @@ filter_banks = np.where(filter_banks == 0, np.finfo(float).eps, filter_banks)  #
 
 ## Log-Mel Spectrum
 
-사람의 소리 인식은 로그(log) 스케일에 가깝다고 합니다. 다시 말해 사람이 두 배 큰 소리라고 인식하려면 실제로는 에너지가 100배 큰 소리여야 한다는 이야기입니다. `filter_banks`에 코드6과 같이 적용합니다.
+사람의 소리 인식은 로그(log) 스케일에 가깝다고 합니다. 다시 말해 사람이 두 배 큰 소리라고 인식하려면 실제로는 에너지가 100배 큰 소리여야 한다는 이야기입니다. 우리는 인간의 말소리 인식에 중요한 특질을 추출하는 데 관심이 있으므로 멜 스펙트럼에 로그 변환을 수행하게 됩니다. `filter_banks`에 코드6과 같이 적용합니다.
 
 ## **코드6** Log-Filter Banks
 {: .no_toc .text-delta }
