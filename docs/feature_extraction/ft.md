@@ -37,11 +37,13 @@ permalink: /docs/fe/ft
 
 ## **수식1** Discrete Fourier Transform (1)
 {: .no_toc .text-delta }
+
 $$X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i~2\pi~k~n~/~N}$$
 
 
 ## **수식2** Inverse Discrete Fourier Transform
 {: .no_toc .text-delta }
+
 $$x_n = \frac{1}{N}\sum_{k=0}^{N-1} X_k e^{i~2\pi~k~n~/~N}$$
 
 
@@ -50,15 +52,16 @@ $$x_n = \frac{1}{N}\sum_{k=0}^{N-1} X_k e^{i~2\pi~k~n~/~N}$$
 ## Concepts
 
 
-푸리에 변환을 직관적으로 이해하려면 [오일러 공식(Euler's formula)](https://ko.wikipedia.org/wiki/%EC%98%A4%EC%9D%BC%EB%9F%AC_%EA%B3%B5%EC%8B%9D)부터 살펴야 합니다. 오일러 공식은 수학자 레온하르트 오일러의 이름이 붙은 공식으로, 삼각함수와 지수함수에 대한 관계를 나타냅니다. 수식3과 같습니다($i$는 허수로, 제곱하여 -1이 되는 수). 수식3의 $x$에 $\pi$를 대입하면 $\exp{\(i\pi\)}+1=0$이라는 오일러의 등식을 구할 수 있습니다.
+푸리에 변환을 직관적으로 이해하려면 [오일러 공식(Euler's formula)](https://ko.wikipedia.org/wiki/%EC%98%A4%EC%9D%BC%EB%9F%AC_%EA%B3%B5%EC%8B%9D)부터 살펴야 합니다. 오일러 공식은 수학자 레온하르트 오일러의 이름이 붙은 공식으로, 삼각함수와 지수함수에 대한 관계를 나타냅니다. 수식3과 같습니다($i$는 허수로, 제곱하여 -1이 되는 수). 수식3의 $\theta$에 $\pi$를 대입하면 $\exp{\(i\pi\)}+1=0$이라는 오일러의 등식을 구할 수 있습니다.
 
 
 ## **수식3** Euler's formula
 {: .no_toc .text-delta }
-$$\exp{\left(ix\right)} = \cos{x} + i\sin{x}$$
+
+$$\exp{\left(i\theta\right)} = \cos{\theta} + i\sin{\theta}$$
 
 
-$\exp{\(ix\)}$는 복소 평면상 반지름이 1인 단위원에 대응합니다. 이는 오일러 공식에 의해 실수 파트(real unit, 코사인에 대응)와 허수 파트(imaginary unit, 사인에 대응)의 합으로 표현할 수 있습니다. 그림1과 같습니다. 
+$\exp{\(i\theta\)}$는 복소 평면상 반지름이 1인 단위원에 대응합니다. 이는 오일러 공식에 의해 실수 파트(real unit, 코사인에 대응)와 허수 파트(imaginary unit, 사인에 대응)의 합으로 표현할 수 있습니다. 그림1과 같습니다(그림1에서는 수식3의 $\theta$를 $\varphi$로 적음). 
 
 
 ## **그림1** Euler's formula
@@ -71,6 +74,7 @@ $\exp{\(ix\)}$는 복소 평면상 반지름이 1인 단위원에 대응합니�
 
 ## **수식4** 복소 지수 함수
 {: .no_toc .text-delta }
+
 $$cis(\theta)=\exp{\left(i\theta\right)} = \cos{\theta} + i\sin{\theta}$$
 
 ## **그림2** 복소 지수 함수
@@ -80,12 +84,20 @@ $$cis(\theta)=\exp{\left(i\theta\right)} = \cos{\theta} + i\sin{\theta}$$
 
 그림3은 푸리에 변환을 개념적으로 나타낸 것입니다. 그림2, 그림3을 직관적으로 이해해보기 위해 수식1을 그대로 다시 가져왔습니다. 시간에서 주파수 도메인으로 푸리에 변환을 실시한다고 했을 때 $x_n$은 시간 도메인의 $n$번째 샘플, $X_k$는 주파수 도메인의 $k$번째 푸리에 변환 결과물입니다. 
 
-수식1에서 $k/N$은 복소평면상 단위원에서 얼마나 빠른 속도로 회전하는지 나타내는 각 속도(angular velocity)를 가리킵니다. $n$는 시간 인덱스(time index)를 가리키는데요. 시간 인덱스가 1 증가한다고 할 때 각 속도 값이 클 수록 그림2의 녹색 실선에 해당하는 움직임이 커지게 됩니다. (단 $i$, $2\pi$는 상수이기 때문에 복소평면 단위원상 속도에 영향을 미치지 않음)
+수식1의 첫번째 줄에서 $k/N$은 복소평면상 단위원에서 얼마나 빠른 속도로 회전하는지 나타내는 각 속도(angular velocity)를 가리킵니다. $n$는 시간 인덱스(time index)를 가리키는데요. 시간 인덱스가 1 증가한다고 할 때 각 속도 값이 클 수록 그림2의 녹색 실선에 해당하는 움직임이 커지게 됩니다. (단 $i$, $2\pi$는 상수이기 때문에 복소평면 단위원상 속도에 영향을 미치지 않음) 
+
+한편 수식1 두번째 줄을 보면 푸리에 변환 결과는 복소수(complex number)로, 코사인 함수와 관계 있는 실수부(real part)와 사인 함수와 관계 있는 허수부(imeginary part)로 구성돼 있는 걸 확인할 수 있습니다.
 
 
 ## **수식1** Discrete Fourier Transform (1)
 {: .no_toc .text-delta }
-$$X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i~2\pi~k~n~/~N}$$
+
+$$
+\begin{align*}
+X_k &= \sum_{n=0}^{N-1} x_n \cdot e^{-i~2\pi~k~n~/~N} \\
+&=\sum _{ n=0 }^{ N-1 } x_{ n }\cdot \left[ \cos { \left( \frac { 2\pi  }{ N } kn \right) -i\cdot \sin { \left( \frac { 2\pi  }{ N } kn \right)  }  }  \right]
+\end{align*}
+$$
 
 
 
@@ -109,7 +121,13 @@ $$X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i~2\pi~k~n~/~N}$$
 
 ## **수식3** Discrete Fourier Transform (2)
 {: .no_toc .text-delta }
-$$\vec{X} = W \cdot \vec{x} \\ W_{kn} = e^{-i~2\pi~k~n~/~N}$$
+
+$$
+\begin{align*}
+\vec{X} &= W \cdot \vec{x} 
+\\ W_{kn} &= e^{-i~2\pi~k~n~/~N}
+\end{align*}
+$$
 
 
 ## **그림2** Fourier Transform
