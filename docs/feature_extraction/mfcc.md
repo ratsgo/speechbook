@@ -198,9 +198,9 @@ $$w\left[ n \right] =0.54-0.46\cos { \left( \frac { 2\pi n }{ N-1 }  \right)  }$
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/tQ5yc1S.png" width="400px" title="source: imgur.com" />
 
-코드4는 해밍 윈도우 값들을 프레임에 곱해 windowing을 적용하는 코드입니다. 해밍 윈도우 값들과 프레임의 개별 샘플(값)들을 element-wise 곱을 수행합니다.
+코드5는 해밍 윈도우 값들을 프레임에 곱해 windowing을 적용하는 코드입니다. 해밍 윈도우 값들과 프레임의 개별 샘플(값)들을 element-wise 곱을 수행합니다.
 
-## **코드4** Hamming Window
+## **코드5** Hamming Window
 {: .no_toc .text-delta }
 ```python
 frames *= np.array([0.54 - 0.46 * np.cos((2 * np.pi * n) / (frame_length - 1)) for n in range(frame_length)])
@@ -223,9 +223,9 @@ array([0.08      , 0.18761956, 0.46012184, 0.77      , 0.97225861,
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/IDTqr8E.png" width="400px" title="source: imgur.com" />
 
-푸리에 변환을 실제로 적용할 때는 **고속 푸리에 변환(Fast Fourier Transform)**이라는 기법을 씁니다. 기존 푸리에 변환에서 중복된 계산량을 줄이는 방법입니다. 이는 파이썬 numpy 패키지에서 `np.fft.fft` 함수를 쓰면 됩니다. 코드5와 같습니다. `NFFT`는 주파수 도메인으로 변환할 때 몇 개의 구간(bin)으로 분석할지 나타내는 인자(argument)인데요. 보통 256이나 512를 쓴다고 합니다.
+푸리에 변환을 실제로 적용할 때는 **고속 푸리에 변환(Fast Fourier Transform)**이라는 기법을 씁니다. 기존 푸리에 변환에서 중복된 계산량을 줄이는 방법입니다. 이는 파이썬 numpy 패키지에서 `np.fft.fft` 함수를 쓰면 됩니다. 코드6과 같습니다. `NFFT`는 주파수 도메인으로 변환할 때 몇 개의 구간(bin)으로 분석할지 나타내는 인자(argument)인데요. 보통 256이나 512를 쓴다고 합니다.
 
-## **코드5** Dicrete Fourer Transform
+## **코드6** Dicrete Fourer Transform
 {: .no_toc .text-delta }
 
 ```python
@@ -233,7 +233,7 @@ NFFT = 512
 dft_frames = np.fft.rfft(frames, NFFT)
 ```
 
-그런데 코드5에 실제 사용한 이산 푸리에 변환 함수는 `np.fft.rfft`인데요. 푸리에 변환 결과는 켤레 대칭이기 때문에 `np.fft.fft` 함수의 변환 결과에서 켤레 대칭인 파트 계산을 생략한 것이 `np.fft.rfft`의 계산 결과입니다. 따라서 `np.fft.rfft`의 리턴 shape은 `num_frames × NFFT`, `np.fft.fft`의 리턴 shape은 `num_frames × NFFT / 2 + 1`이 됩니다. 다음은 이해를 돕기 위해 프레임 하나([0.2, 0.7, 0.5, 0.3, 0.1])에 대해 이산 푸리에 변환을 수행한 것입니다.
+그런데 코드6에 실제 사용한 이산 푸리에 변환 함수는 `np.fft.rfft`인데요. 푸리에 변환 결과는 켤레 대칭이기 때문에 `np.fft.fft` 함수의 변환 결과에서 켤레 대칭인 파트 계산을 생략한 것이 `np.fft.rfft`의 계산 결과입니다. 따라서 `np.fft.rfft`의 리턴 shape은 `num_frames × NFFT`, `np.fft.fft`의 리턴 shape은 `num_frames × NFFT / 2 + 1`이 됩니다. 다음은 이해를 돕기 위해 프레임 하나([0.2, 0.7, 0.5, 0.3, 0.1])에 대해 이산 푸리에 변환을 수행한 것입니다.
 
 ```
 >>> np.fft.fft([0.2, 0.7, 0.5, 0.3, 0.1])
@@ -256,9 +256,9 @@ array([ 1.8+0.j        , -0.2-0.68819096j, -0.2-0.16245985j])
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/HTD1vC2.png" width="400px" title="source: imgur.com" />
 
-그림4에서 진폭이 $\sqrt { { a }^{ 2 }+{ b }^{ 2 } }$이 되는 것은 피타고라스 정리를 활용해 유도할 수 있습니다. arctan 함수(=${ \tan }^{-1}$)에 탄젠트 값을 넣으면 각도가 리턴되는데요. ${ \tan   }^{ -1 }\left( \frac { b }{ a }  \right)$는 탄젠트 값이 $a/b$인 $\theta$를 가리킵니다. 어쨌든 **MFCC를 구할 때는 음성 인식에 불필요한 위상 정보는 없애고 진폭 정보만을 남깁니다.** 코드6을 수행하면 됩니다. `np.absolute` 함수는 복소수 입력($a+b \times j$)에 대해 $\sqrt { { a }^{ 2 }+{ b }^{ 2 } }$를 리턴합니다.
+그림4에서 진폭이 $\sqrt { { a }^{ 2 }+{ b }^{ 2 } }$이 되는 것은 피타고라스 정리를 활용해 유도할 수 있습니다. arctan 함수(=${ \tan }^{-1}$)에 탄젠트 값을 넣으면 각도가 리턴되는데요. ${ \tan   }^{ -1 }\left( \frac { b }{ a }  \right)$는 탄젠트 값이 $a/b$인 $\theta$를 가리킵니다. 어쨌든 **MFCC를 구할 때는 음성 인식에 불필요한 위상 정보는 없애고 진폭 정보만을 남깁니다.** 코드7을 수행하면 됩니다. `np.absolute` 함수는 복소수 입력($a+b \times j$)에 대해 $\sqrt { { a }^{ 2 }+{ b }^{ 2 } }$를 리턴합니다.
 
-## **코드6** Magnitude
+## **코드7** Magnitude
 {: .no_toc .text-delta }
 
 ```python
@@ -269,14 +269,14 @@ mag_frames = np.absolute(dft_frames)
 
 ## Power Spectrum
 
-$k$번째 주파수 구간(bin)에 해당하는 이산 푸리에 변환 결과를 $X\[k\]$라고 할 때 파워(Power)를 구하는 공식은 수식3, 코드6과 같습니다($N$은 이산 푸리에 변환의 `NFFT`에 대응). 진폭(magnitude)의 제곱을 $N$으로 나눠준 값입니다. 이산 푸리에 변환 결과(스펙트럼)에 수식3을 적용한 결과를 **파워 스펙트럼(Power Spectrum)**이라고 합니다. 
+$k$번째 주파수 구간(bin)에 해당하는 이산 푸리에 변환 결과를 $X\[k\]$라고 할 때 파워(Power)를 구하는 공식은 수식3, 코드8과 같습니다($N$은 이산 푸리에 변환의 `NFFT`에 대응). 진폭(magnitude)의 제곱을 $N$으로 나눠준 값입니다. 이산 푸리에 변환 결과(스펙트럼)에 수식3을 적용한 결과를 **파워 스펙트럼(Power Spectrum)**이라고 합니다. 
 
 ## **수식3** Power
 {: .no_toc .text-delta }
 
 $$\text{Power}=\frac { { \left| X\left[ k \right]  \right|  }^{ 2 } }{ N }$$
 
-## **코드6** Power Spectrum
+## **코드8** Power Spectrum
 {: .no_toc .text-delta }
 
 ```python
@@ -308,7 +308,7 @@ array([[6.74745544e-01, 1.44676793e+01, 2.35071822e+01, ...,
 
 사람의 소리 인식은 1000Hz 이하의 저주파수(low frequency) 영역대가 고주파수(high frequency) 대비 민감하다고 합니다. 이에 주파수 영역대별 에너지 정보가 있는 데이터(`pow_frames`)에서 저주파수 영역대를 고주파수 영역대 대비 상대적으로 세밀하게 볼 필요가 있습니다. 이때 적용하는 기법을 **필터뱅크(Filter Banks)**라고 합니다. 
 
-필터뱅크는 **멜 스케일(Mel Scale)** 필터를 쓰게 되는데요. 기존 주파수($f$, 단위는 헤르츠/Hz)를 멜($m$, 단위는 멜/mel)로, 멜을 헤르츠로 변환하는 공식은 수식4와 같습니다. 헤르츠 단위 주파수 $k$를 멜 단위 주파수 $m$에 대응시키는 필터를 만드는 공식은 수식5와 같습니다. 수식5의 필터를 파이썬으로 만드는 코드는 코드6과 같습니다. 수식4, 수식5, 코드6은 보기만 해도 머리가 아픈데요. 일단은 그렇구나 하고 바로 다음으로 넘어갑시다.
+필터뱅크는 **멜 스케일(Mel Scale)** 필터를 쓰게 되는데요. 기존 주파수($f$, 단위는 헤르츠/Hz)를 멜($m$, 단위는 멜/mel)로, 멜을 헤르츠로 변환하는 공식은 수식4와 같습니다. 헤르츠 단위 주파수 $k$를 멜 단위 주파수 $m$에 대응시키는 필터를 만드는 공식은 수식5와 같습니다. 수식5의 필터를 파이썬으로 만드는 코드는 코드9와 같습니다. 수식4, 수식5, 코드9는 보기만 해도 머리가 아픈데요. 일단은 그렇구나 하고 바로 다음으로 넘어갑시다.
 
 ## **수식4** Mel vs Herz
 {: .no_toc .text-delta }
@@ -339,7 +339,7 @@ H_m(k) =
 $$
 
 
-## **코드6** Mel Scale Filter
+## **코드9** Mel Scale Filter
 {: .no_toc .text-delta }
 ```python
 nfilt = 40
@@ -360,7 +360,7 @@ for m in range(1, nfilt + 1):
         fbank[m - 1, k] = (bin[m + 1] - k) / (bin[m + 1] - bin[m])
 ```
 
-코드6에서 멜 스케일 필터를 40개(`nfilt`) 쓰기로 정했습니다. 다음은 이 가운데 첫번째와 마지막 필터를 파이썬 콘솔에서 확인해본 것입니다. 각 필터의 길이는 `NFFT / 2 + 1`(257)입니다(이산 푸리에 변환을 `np.fft.fft` 함수로 수행했다면 `NFFT`).
+코드9에서 멜 스케일 필터를 40개(`nfilt`) 쓰기로 정했습니다. 다음은 이 가운데 첫번째와 마지막 필터를 파이썬 콘솔에서 확인해본 것입니다. 각 필터의 길이는 `NFFT / 2 + 1`(257)입니다(이산 푸리에 변환을 `np.fft.fft` 함수로 수행했다면 `NFFT`).
 
 ```
 >>> len(fbank[0])
@@ -439,11 +439,11 @@ array([0.        , 0.        , 0.        , 0.        , 0.        ,
        0.05882353, 0.        ])
 ```
 
-코드7은 `pow_frames`에 필터 뱅크 기법을 적용합니다. 앞서 만든 `fbank`와 내적(inner product)를 수행하는 것인데요. 이를 앞의 `fbank[0]`, `fbank[39]`와 연관지어 이해해 봅시다. `fbank[0]`와 `pow_frames`를 내적하면 이산 푸리에 변환으로 분석된 257개 주파수 영역대 가운데 2번째 주파수 구간(bin)만 남기고 모두 무시합니다. `fbank[39]`와 `pow_frames`를 내적하면 257개 주파수 영역대 가운데 226~256번째 구간만 남기고 모두 무시하는데요. `fbank[39]`의 각 요소값은 해당 주파수 구간을 얼마나 살필지 가중치 역할을 담당하게 됩니다. 
+코드10은 `pow_frames`에 필터 뱅크 기법을 적용합니다. 앞서 만든 `fbank`와 내적(inner product)를 수행하는 것인데요. 이를 앞의 `fbank[0]`, `fbank[39]`와 연관지어 이해해 봅시다. `fbank[0]`와 `pow_frames`를 내적하면 이산 푸리에 변환으로 분석된 257개 주파수 영역대 가운데 2번째 주파수 구간(bin)만 남기고 모두 무시합니다. `fbank[39]`와 `pow_frames`를 내적하면 257개 주파수 영역대 가운데 226~256번째 구간만 남기고 모두 무시하는데요. `fbank[39]`의 각 요소값은 해당 주파수 구간을 얼마나 살필지 가중치 역할을 담당하게 됩니다. 
 
-요컨대 **`fbank[0]`는 헤르츠 기준 저주파수 영역대를 세밀하게 살피는 필터이고, `fbank[39]`는 고주파수 영역대를 넓게 보는 필터**라는 이야기입니다. 이는 그림4에서도 확인할 수 있습니다. 각 삼각형의 아랫변 범위가 각 멜 스케일 필터가 담당하는 헤르츠 기준 주파수 영역대입니다. 저주파수 영역대는 촘촘하게, 고주파수 영역대는 듬성듬성 보고 있습니다. 한편 코드7의 두번째 줄은 필터 뱅크 수행 결과가 0인 곳에 작은 숫자를 더해줘서 numerical problem을 예방하는 방어 장치입니다.
+요컨대 **`fbank[0]`는 헤르츠 기준 저주파수 영역대를 세밀하게 살피는 필터이고, `fbank[39]`는 고주파수 영역대를 넓게 보는 필터**라는 이야기입니다. 이는 그림4에서도 확인할 수 있습니다. 각 삼각형의 아랫변 범위가 각 멜 스케일 필터가 담당하는 헤르츠 기준 주파수 영역대입니다. 저주파수 영역대는 촘촘하게, 고주파수 영역대는 듬성듬성 보고 있습니다. 한편 코드10의 두번째 줄은 필터 뱅크 수행 결과가 0인 곳에 작은 숫자를 더해줘서 numerical problem을 예방하는 방어 장치입니다.
 
-## **코드7** Filter Banks
+## **코드10** Filter Banks
 {: .no_toc .text-delta }
 
 ```python
@@ -461,15 +461,15 @@ filter_banks = np.where(filter_banks == 0, np.finfo(float).eps, filter_banks)  #
 
 ## Log-Mel Spectrum
 
-사람의 소리 인식은 로그(log) 스케일에 가깝다고 합니다. 다시 말해 사람이 두 배 큰 소리라고 인식하려면 실제로는 에너지가 100배 큰 소리여야 한다는 이야기입니다. 우리는 인간의 말소리 인식에 중요한 특질을 추출하는 데 관심이 있으므로 멜 스펙트럼에 로그 변환을 수행하게 됩니다. `filter_banks`에 코드6과 같이 적용합니다.
+사람의 소리 인식은 로그(log) 스케일에 가깝다고 합니다. 다시 말해 사람이 두 배 큰 소리라고 인식하려면 실제로는 에너지가 100배 큰 소리여야 한다는 이야기입니다. 우리는 인간의 말소리 인식에 중요한 특질을 추출하는 데 관심이 있으므로 멜 스펙트럼에 로그 변환을 수행하게 됩니다. `filter_banks`에 코드11과 같이 적용합니다.
 
-## **코드6** Log-Filter Banks
+## **코드11** Log-Filter Banks
 {: .no_toc .text-delta }
 ```python
 filter_banks = 20 * np.log10(filter_banks)  # dB
 ```
 
-코드6까지 모두 수행한 결과는 다음과 같습니다. 로그를 취하기 전의 음성 피처를 **멜 스펙트럼(Mel Spectrum)**, 로그까지 적용한 음성 피처를 **로그 멜 스펙트럼(Log-Mel Spectrum)**이라고 합니다. 멜 스펙트럼, 로그 멜 스펙트럼 모두 수행 이후의 차원 수는 `num_frames × nfilt`입니다.
+코드11까지 모두 수행한 결과는 다음과 같습니다. 로그를 취하기 전의 음성 피처를 **멜 스펙트럼(Mel Spectrum)**, 로그까지 적용한 음성 피처를 **로그 멜 스펙트럼(Log-Mel Spectrum)**이라고 합니다. 멜 스펙트럼, 로그 멜 스펙트럼 모두 수행 이후의 차원 수는 `num_frames × nfilt`입니다.
 
 ```
 >>> filter_banks
@@ -494,13 +494,13 @@ array([[ -5.51767373,  -3.4808014 , -44.47846101, ..., -24.56746926,
 
 ## MFCCs
 
-멜 스펙트럼 혹은 로그 멜 스펙트럼은 태생적으로 피처(feature) 내 변수 간 상관관계(correlation)가 존재합니다. 그도 그럴 것이 멜 스케일 필터(수식5, 코드6)를 보면 주변 몇 개의 헤르츠 기준 주파수 영역대 에너지를 한데 모아 보기 때문입니다. 다시 말해 헤르츠 기준 특정 주파수 영역대의 에너지 정보가 멜 스펙트럼 혹은 로그 멜 스펙트럼의 여러 차원에 영향을 주는 구조입니다. 이는 변수 간 독립(independence)을 가정하고 모델링하는 [가우시안 믹스처 모델(Gaussian Mixture Model)](https://ratsgo.github.io/speechbook/docs/am/gmm#modeling-speech-recognition)에는 독이 될 수 있습니다.
+멜 스펙트럼 혹은 로그 멜 스펙트럼은 태생적으로 피처(feature) 내 변수 간 상관관계(correlation)가 존재합니다. 그도 그럴 것이 멜 스케일 필터(수식5, 코드9)를 보면 주변 몇 개의 헤르츠 기준 주파수 영역대 에너지를 한데 모아 보기 때문입니다. 다시 말해 헤르츠 기준 특정 주파수 영역대의 에너지 정보가 멜 스펙트럼 혹은 로그 멜 스펙트럼의 여러 차원에 영향을 주는 구조입니다. 이는 변수 간 독립(independence)을 가정하고 모델링하는 [가우시안 믹스처 모델(Gaussian Mixture Model)](https://ratsgo.github.io/speechbook/docs/am/gmm#modeling-speech-recognition)에는 독이 될 수 있습니다.
 
 로그 멜 스펙트럼에 역푸리에 변환(Inverse Fourier Transform)을 수행해 변수 간 상관관계를 해소한 피처를 **Mel-frequency Cepstral Coefficients(MFCCs)**라고 합니다. 로그 멜 스펙트럼에 역푸리에 변환을 실시하면 상관관계가 높았던 주파수 도메인 정보가 새로운 도메인으로 바뀌어 이전 대비 상대적으로 변수 간 상관관계가 해소되게 됩니다. 
 
-MFCCs를 만들 때는 역이산 코사인 변환(Inverse Discrete Cosine Transform)을 씁니다. 코사인 변환은 푸리에 변환에서 실수 파트만을 수행합니다. 마지막으로 MFCCs의 shape은 `num_frames × nfilt`인데요. 이 행렬 가운데 2-13번째 열벡터들만 뽑아서 최종적인 MFCCs 피처로 사용하게 됩니다. 이외 주파수 영역대 정보들은 만들 때마다 워낙 빠르게 바뀌어 음성 인식 시스템 성능 향상에 도움이 되지 않기 때문이라고 합니다.
+MFCCs를 만들 때는 코드12처럼 역이산 코사인 변환(Inverse Discrete Cosine Transform)을 씁니다. 코사인 변환은 푸리에 변환에서 실수 파트만을 수행합니다. 마지막으로 MFCCs의 shape은 `num_frames × nfilt`인데요. 이 행렬 가운데 2-13번째 열벡터들만 뽑아서 최종적인 MFCCs 피처로 사용하게 됩니다. 이외 주파수 영역대 정보들은 만들 때마다 워낙 빠르게 바뀌어 음성 인식 시스템 성능 향상에 도움이 되지 않기 때문이라고 합니다.
 
-## **코드8** Mel-frequency Cepstral Coefficients
+## **코드12** Mel-frequency Cepstral Coefficients
 {: .no_toc .text-delta }
 ```python
 from scipy.fftpack import dct
@@ -536,9 +536,9 @@ array([[-70.61457095, -73.42417413,   6.03918874, ...,   0.41193953,
 
 ## Post Processing
 
-MFCCs를 입력으로 하는 음성 인식 시스템의 성능을 높이기 위해 몇 가지 후처리를 하기도 합니다. 대표적으로 Lift, Mean Normalization 등이 있습니다. 전자는 MFCCs에, 후자는 멜 스펙트럼 혹은 로그 멜 스펙트럼에 실시합니다. 각각 코드9, 코드10과 같습니다.
+MFCCs를 입력으로 하는 음성 인식 시스템의 성능을 높이기 위해 몇 가지 후처리를 하기도 합니다. 대표적으로 Lift, Mean Normalization 등이 있습니다. 전자는 MFCCs에, 후자는 멜 스펙트럼 혹은 로그 멜 스펙트럼에 실시합니다. 각각 코드13, 코드14와 같습니다.
 
-## **코드9** Lift
+## **코드13** Lift
 {: .no_toc .text-delta }
 
 ```python
@@ -549,7 +549,7 @@ lift = 1 + (cep_lifter / 2) * np.sin(np.pi * n / cep_lifter)
 mfcc *= lift
 ```
 
-## **코드10** Mean Normalization
+## **코드14** Mean Normalization
 {: .no_toc .text-delta }
 ```python
 filter_banks -= (np.mean(filter_banks, axis=0) + 1e-8)
