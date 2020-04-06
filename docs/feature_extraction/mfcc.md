@@ -233,7 +233,7 @@ NFFT = 512
 dft_frames = np.fft.rfft(frames, NFFT)
 ```
 
-그런데 코드6에 실제 사용한 이산 푸리에 변환 함수는 `np.fft.rfft`인데요. 푸리에 변환 결과는 켤레 대칭이기 때문에 `np.fft.fft` 함수의 변환 결과에서 켤레 대칭인 파트 계산을 생략한 것이 `np.fft.rfft`의 계산 결과입니다. 따라서 `np.fft.rfft`의 리턴 shape은 `num_frames × NFFT`, `np.fft.fft`의 리턴 shape은 `num_frames × NFFT / 2 + 1`이 됩니다. 다음은 이해를 돕기 위해 프레임 하나([0.2, 0.7, 0.5, 0.3, 0.1])에 대해 이산 푸리에 변환을 수행한 것입니다.
+그런데 코드6에 실제 사용한 이산 푸리에 변환 함수는 `np.fft.rfft`인데요. 푸리에 변환 결과는 켤레 대칭이기 때문에 `np.fft.fft` 함수의 변환 결과에서 켤레 대칭인 파트 계산을 생략한 것이 `np.fft.rfft`의 계산 결과입니다. 따라서 `np.fft.fft`의 리턴 shape은 `num_frames × NFFT`, `np.fft.rfft`의 리턴 shape은 `num_frames × NFFT / 2 + 1`이 됩니다. 다음은 이해를 돕기 위해 프레임 하나([0.2, 0.7, 0.5, 0.3, 0.1])에 대해 이산 푸리에 변환을 수행한 것입니다.
 
 ```
 >>> np.fft.fft([0.2, 0.7, 0.5, 0.3, 0.1])
