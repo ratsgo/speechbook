@@ -32,7 +32,7 @@ permalink: /docs/am/cdam
 
 이에 도입된 개념이 **Context Dependent Phone(CD Phone)**입니다. 앞뒤 컨텍스트를 반영하는 것입니다. 예컨대 `YELL`의 `eh`을 봅시다. 이 `eh`는 그 이전에 `y`, 그 이후에 `l`이 등장합니다. 이에 `YELL`의 `eh`를 `y-eh+l`로 표현하게 됩니다. 마찬가지로 `WED`의 `eh`는 `e-eh+d`, `BEN`의 `eh`는 `b-eh+n`으로 표시해 `YELL`의 `eh`와 구별합니다. CD Phone을 모델링할 때 기준 음소를 포함해 그 앞뒤 음소 총 3개를 고려하는 triphone을 일반적으로 사용합니다. 
 
-CD phone은 subphone과는 대비되는 개념입니다. CD Phone 모델링시 음소보다 작은 단위의 subphone을 쓸 수 있지만 그 자체로 CD phone이 되는 것은 아닙니다. CD Phone을 모델링한다는 것은 '음소보다 작은 단위를 쓴다'에 강조점이 있는 것이 아니라 '앞뒤 컨텍스트를 고려한다'에 방점이 찍혀 있기 때문입니다. 한편 CD Phone의 대척점에 Context-Independent Phone이 있습니다. 음소 모델링시 앞뒤 컨텍스트를 고려하지 않고 독립적으로 본다는 뜻입니다.
+CD phone은 subphone과는 대비되는 개념입니다. CD Phone 모델링시 음소보다 작은 단위의 subphone을 쓸 수 있지만 그 자체로 CD phone이 되는 것은 아닙니다. CD Phone을 모델링한다는 것은 '음소보다 작은 단위를 쓴다'에 강조점이 있는 것이 아니라 '앞뒤 컨텍스트를 고려한다'에 방점이 찍혀 있기 때문입니다. 한편 CD Phone의 대척점에 Context-Independent Phone(혹은 monophone)이 있습니다. 음소 모델링시 앞뒤 컨텍스트를 고려하지 않고 독립적으로 본다는 뜻입니다.
 
 ---
 
