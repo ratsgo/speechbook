@@ -9,7 +9,7 @@ permalink: /docs/decoding/wfst
 # Weighted Finite-State Transducers
 {: .no_toc }
 
-[기존 음성 인식 시스템](https://ratsgo.github.io/speechbook/docs/am) 학습이 끝나고 디코딩할 때 사용하는 **Weighted Finite-State Transducers**를 살펴봅니다. 이 글은 [Speech Recognition — Weighted Finite-State Transducers (WFST)](https://medium.com/@jonathan_hui/speech-recognition-weighted-finite-state-transducers-wfst-a4ece08a89b7)에서 개인적으로 중요하다 싶은 내용들만 간추렸습니다. 이 부분은 내용이 어려워 제가 이해한 방식대로 정리했음을 미리 밝힙니다. 자세한 내용은 원문을 참고하시면 좋을 것 같습니다.
+[기존 음성 인식 시스템](https://ratsgo.github.io/speechbook/docs/am) 학습이 끝나고 디코딩시 여러 경로들에 대한 확률 계산을 빠르고 효율적으로 시행하기 위해 사용하는 **Weighted Finite-State Transducers**를 살펴봅니다. 이 글은 [Speech Recognition — Weighted Finite-State Transducers (WFST)](https://medium.com/@jonathan_hui/speech-recognition-weighted-finite-state-transducers-wfst-a4ece08a89b7)에서 개인적으로 중요하다 싶은 내용들만 간추렸습니다. 이 부분은 내용이 어려워 제가 이해한 방식대로 정리했음을 미리 밝힙니다. 자세한 내용은 원문을 참고하시면 좋을 것 같습니다.
 {: .fs-4 .ls-1 .code-example }
 
 ## Table of contents
@@ -32,7 +32,7 @@ Weighted Finite-State Transducers(WFST)를 개념적으로 나타낸 그림은 �
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/kN1n00y.png" width="500px" title="source: imgur.com" />
 
-그림2의 하단은 발음사전(pronunciation lexi)을 WFST로 나타낸 것입니다. 이 WFST는 출력 레이블은 `data`라는 단어에 대응되는 입력 레이블 시퀀스는 `d ey t ax`나 `d ey dx ax`, `d ae t ax`, `d ae dx ax` 등 4가지입니다. 출력 레이블 시퀀스 `dew`라는 단어에 대응하는 입력 레이블 시퀀스는 `d ew`입니다. 이 WFST는 총 5가지의 경로를 허용하고 있는데요. 첫번째 엣지가 이후 엣지 시퀀스의 디코딩 결과를 대변하고 있습니다. 이와 관련해 두번째 이후의 전이(transition)는 출력이 모두 $\epsilon$(empty)임을 확인할 수 있습니다.
+그림2의 하단은 발음사전(pronunciation lexi)을 WFST로 나타낸 것입니다. 이 WFST는 출력 레이블은 `data`라는 단어에 대응되는 입력 레이블 시퀀스는 `d ey t ax`나 `d ey dx ax`, `d ae t ax`, `d ae dx ax` 등 4가지입니다. 출력 레이블 시퀀스 `dew`라는 단어에 대응하는 입력 레이블 시퀀스는 `d ew`입니다. 이 WFST는 총 5가지의 경로가 나타나 있는데요. 첫번째 엣지가 이후 엣지 시퀀스의 디코딩 결과를 대변하고 있습니다. 이와 관련해 두번째 이후의 전이(transition)는 출력이 모두 $\epsilon$(empty)임을 확인할 수 있습니다.
 
 수식1은 WFST를 수식으로 정리한 것입니다. 이를 그림2 하단 예시와 연관지어 생각해 보겠습니다. 우선 $\pi$는 시작 상태 집합($I$) 가운데 하나 혹은 여럿의 시퀀스로 시작해 종료 상태 집합($F$) 가운데 하나 혹은 여럿의 시퀀스로 끝나되, 입력 시퀀스 $x$와 출력 시퀀스 $y$에 관계된 경로(path) 가운데 하나입니다. 그림2 하단 예시에서 `d ey t ax`나 `d ey dx ax`, `d ae t ax`, `d ae dx ax` 각각이 $\pi$에 해당합니다. `d ey t ax`의 확률은 시작~종료에 이르는 전이 확률들을 모두 곱하면(⨂) 됩니다. $1 \times 0.5 \times 0.3 \times 1$입니다. 모든 가능한 경로들의 합(⨁)이 WFST의 최종 결과이므로 `d ey t ax`, `d ey dx ax`, `d ae t ax`, `d ae dx ax` 네 가지 확률 값들을 모두 더해줍니다.
 
@@ -84,7 +84,7 @@ Minimization 연산은 겹치는 복수의 상태(state)를 합치는 연산입�
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/O0e5AxA.jpg" width="500px" title="source: imgur.com" />
 
-WFST를 음성 인식에 적용하는 과정을 도식적으로 나타낸 그림은 그림5와 그림6입니다. 입력 음성을 [MFCCs](https://ratsgo.github.io/speechbook/docs/fe/mfcc)로 바꾸어 이를 학습이 완료된 [은닉 마코프 모델(Hidden Markov Model) + 가우시안 믹스처 모델(Gaussian Mixture Model)](https://ratsgo.github.io/speechbook/docs/am)에 넣으면 상태 확률 벡터 시퀀스(`HMM 상태 수 × MFCCs 프레임 개수`)가 출력됩니다. 여기에 [비터비 알고리즘(Viterbi Algorithm)](https://ratsgo.github.io/speechbook/docs/decoding/viterbi), [Word Lattice](https://ratsgo.github.io/speechbook/docs/decoding/multipass#word-lattice), [스택 디코딩(Stack Decoding)](https://ratsgo.github.io/speechbook/docs/decoding/stack) 등 기법을 적용한 결과가 [HMM states(표1) 내지 Context dependent phones(그림10/그림11)](https://ratsgo.github.io/speechbook/docs/am/cdam) 시퀀스 입니다. 이를 **HMM Transducer**에 넣으면 `Context Independent phones`(에 관련된 확률)가 출력됩니다.
+WFST를 음성 인식에 적용하는 과정을 도식적으로 나타낸 그림은 그림5와 그림6입니다. 입력 음성을 [MFCCs](https://ratsgo.github.io/speechbook/docs/fe/mfcc)로 바꾸어 이를 학습이 완료된 [은닉 마코프 모델(Hidden Markov Model) + 가우시안 믹스처 모델(Gaussian Mixture Model)](https://ratsgo.github.io/speechbook/docs/am)에 넣으면 상태 확률 벡터 시퀀스(`HMM 상태 수 × MFCCs 프레임 개수`)가 출력됩니다. 여기에서 [비터비 알고리즘(Viterbi Algorithm)](https://ratsgo.github.io/speechbook/docs/decoding/viterbi), [Word Lattice](https://ratsgo.github.io/speechbook/docs/decoding/multipass#word-lattice), [스택 디코딩(Stack Decoding)](https://ratsgo.github.io/speechbook/docs/decoding/stack) 등 기법을 적용한 결과가 [HMM states(표1) 내지 Context dependent phones(그림10/그림11)](https://ratsgo.github.io/speechbook/docs/am/cdam) 시퀀스 입니다. 이를 **HMM Transducer**에 넣으면 `Context Independent phones`(에 관련된 확률)가 출력됩니다.
 
 ## **그림5** Concept (1)
 {: .no_toc .text-delta }
