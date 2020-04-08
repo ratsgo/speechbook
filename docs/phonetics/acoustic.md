@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Acoustic Phonetics
-nav_order: 2
+nav_order: 1
 parent: Phonetics
 permalink: /docs/phonetics/acoustic
 ---

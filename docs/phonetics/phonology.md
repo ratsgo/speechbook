@@ -1,8 +1,9 @@
 ---
 layout: default
 title: Korean Phonology
-nav_order: 1
+nav_order: 2
 parent: Phonetics
+has_children: true
 permalink: /docs/phonetics/phonology
 ---
 
