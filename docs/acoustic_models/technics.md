@@ -1,15 +1,15 @@
 ---
 layout: default
-title: Important Terms
-nav_order: 7
+title: Training Technics
+nav_order: 6
 parent: Acoustic Models
-permalink: /docs/am/terms
+permalink: /docs/am/technics
 ---
 
-# Important Terms
+# Training Technics
 {: .no_toc }
 
-은닉마코프모델(Hidden Markov Model) 기반의 음성 인식 시스템에서 중요한 개념/용어들에 대해 살펴봅니다.
+은닉마코프모델(Hidden Markov Model) + 가우시안 믹스처 모델(Gaussian Mixture Model) 기반의 음향 모델 관련 중요 학습 테크닉들을 살펴봅니다.
 {: .fs-4 .ls-1 .code-example }
 
 

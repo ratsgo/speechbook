@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Discriminative Training
-nav_order: 6
+nav_order: 5
 parent: Acoustic Models
 permalink: /docs/am/discriminative
 ---
