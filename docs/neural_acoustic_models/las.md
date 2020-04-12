@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Listen, Attend and Spell
-nav_order: 2
+nav_order: 1
 parent: Neural Acoustic Models
 permalink: /docs/neuralam/las
 ---

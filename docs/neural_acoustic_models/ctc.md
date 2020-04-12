@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Connectionist Temporal Classification
-nav_order: 5
+nav_order: 4
 parent: Neural Acoustic Models
 permalink: /docs/neuralam/ctc
 ---
