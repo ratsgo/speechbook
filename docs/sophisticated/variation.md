@@ -72,3 +72,6 @@ $$\hat { \mathbf{\mu}  } =\mathbf{W} \mathbf{\mu} + \mathbf{\omega}$$
 ## References
 
 - [Speech and Language Processing 2nd Edition](https://www.amazon.com/Speech-Language-Processing-Daniel-Jurafsky/dp/0131873210)
+
+
+---
