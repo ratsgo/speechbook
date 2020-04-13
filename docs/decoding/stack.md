@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Stack Decoding
-nav_order: 4
+nav_order: 3
 parent: Decoding strategy
 permalink: /docs/decoding/stack
 ---

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Viterbi Decoding
-nav_order: 2
+nav_order: 1
 parent: Decoding strategy
 permalink: /docs/decoding/viterbi
 ---
