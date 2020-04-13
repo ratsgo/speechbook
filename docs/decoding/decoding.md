@@ -8,6 +8,7 @@ permalink: /docs/decoding
 ---
 
 # Decoding strategy
+{: .no_toc }
 
 학습이 완료된 음성인식 모델을 가지고 입력 음성이 주어졌을 때 최적의 음소/단어 시퀀스를 디코딩하는 방법을 알아봅니다.
 {: .fs-4 .ls-1 .code-example }
