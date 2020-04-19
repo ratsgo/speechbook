@@ -4,6 +4,7 @@ title: Korean Phonology
 nav_order: 2
 parent: Phonetics
 has_children: true
+has_toc: false
 permalink: /docs/phonetics/phonology
 ---
 
