@@ -3,7 +3,7 @@ layout: default
 title: PASE
 nav_order: 3
 parent: Neural Feature Extraction
-permalink: /docs/neuralfe/loss
+permalink: /docs/neuralfe/pase
 ---
 
 # PASE
