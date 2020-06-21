@@ -201,3 +201,10 @@ class ASRDataset(torch.utils.data.Dataset):
 
 
 ---
+
+
+## References
+
+- [Lugosch, L., Ravanelli, M., Ignoto, P., Tomar, V. S., & Bengio, Y. (2019). Speech model pre-training for end-to-end spoken language understanding. arXiv preprint arXiv:1904.03670.](https://arxiv.org/abs/1904.03670)
+
+---

@@ -10,7 +10,7 @@ permalink: /docs/neuralfe/sincnet
 {: .no_toc }
 
 
-뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다. SincNet은 벤지오 연구팀이 2019년 발표한 [SPEAKER RECOGNITION FROM RAW WAVEFORM WITH SINCNET](https://arxiv.org/pdf/1808.00158.pdf) 논문에서 제안됐는데요. 음성 피처 추출에 유리한 컨볼루션 신경망(Convolutional Neural Network)의 첫번째 레이어에 싱크 함수(sinc function)를 도입해 계산 효율성과 성능 두 마리 토끼를 잡아서 주목받았습니다.
+뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 SincNet 모델을 살펴봅니다. SincNet은 벤지오 연구팀이 2018년 발표한 [SPEAKER RECOGNITION FROM RAW WAVEFORM WITH SINCNET](https://arxiv.org/pdf/1812.05920) 논문에서 제안됐는데요. 음성 피처 추출에 유리한 컨볼루션 신경망(Convolutional Neural Network)의 첫번째 레이어에 싱크 함수(sinc function)를 도입해 계산 효율성과 성능 두 마리 토끼를 잡아서 주목받았습니다.
 {: .fs-4 .ls-1 .code-example }
 
 
@@ -538,3 +538,14 @@ SincNet 저자들은 화자 인식 태스크에 이 모델을 적용했습니다
 ## **그림17** SincNet 실험 결과 (2)
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/E8jQx5p.png" width="400px" title="source: imgur.com" />
+
+
+---
+
+
+## References
+
+
+- [Ravanelli, M., & Bengio, Y. (2018). Speech and speaker recognition from raw waveform with sincnet. arXiv preprint arXiv:1812.05920.](https://arxiv.org/pdf/1812.05920)
+
+---

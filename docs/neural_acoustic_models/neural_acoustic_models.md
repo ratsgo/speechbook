@@ -145,6 +145,24 @@ RNN-T는 크게 세 가지 요소로 구성돼 있습니다. 첫째는 인코더
 
 ---
 
+## Training technics
+
+다음은 [End-to-End Models for Automatic Speech Recognition, Interspeech 2018](http://iscslp2018.org/images/T4_Towards%20end-to-end%20speech%20recognition.pdf)에 제시된 음성 인식 모델의 학습 테크닉들입니다. 추후 따로 정리해 보겠습니다.
+
+- Wordpiece Model
+- Multi-headed Attention
+- Minimum Word Error Rate
+- Scheduled Sampling
+- Asynchronous and Synchronous Training
+- Label Smoothing
+- External Language Model
+- Recurrent projection layer
+- Layer normalization
+- Time Reduction Layer
+
+
+---
+
 ## References
 
 - [Rohit Prabhavalkar and Tara Sainath, End-to-End Models for Automatic Speech Recognition, Interspeech 2018](http://iscslp2018.org/images/T4_Towards%20end-to-end%20speech%20recognition.pdf)

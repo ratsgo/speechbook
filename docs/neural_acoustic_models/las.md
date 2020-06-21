@@ -9,7 +9,7 @@ permalink: /docs/neuralam/las
 # Listen, Attend and Spell
 {: .no_toc }
 
-Sequence-to-Sequence model 기반 음성 인식 모델 Listen, Attend and Spell(LAS) 기법을 소개합니다. LAS는 제안 당시 주류를 이루고 있었던 Hidden Markov Model 기반 기존 음성 인식 시스템과 달리 모든 컴포넌트를 End-to-End로 학습할 수 있어 주목을 받았습니다. 최근에도 다른 모델 대비 경쟁력 있는 성능으로 각광받고 있는 모델입니다. 
+Sequence-to-Sequence model 기반 음성 인식 모델 [Listen, Attend and Spell(LAS)](https://arxiv.org/pdf/1508.01211.pdf) 기법을 소개합니다. LAS는 제안 당시 주류를 이루고 있었던 Hidden Markov Model 기반 기존 음성 인식 시스템과 달리 모든 컴포넌트를 End-to-End로 학습할 수 있어 주목을 받았습니다. 최근에도 다른 모델 대비 경쟁력 있는 성능으로 각광받고 있는 모델입니다. 
 {: .fs-4 .ls-1 .code-example }
 
 
@@ -167,6 +167,14 @@ LAS에 Ground Truth 문자들을 계속 넣어 학습하는 것보다는 직전 
 ## **그림2** Listen, Attend and Spell
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/c96rheT.png" width="400px" title="source: imgur.com" />
+
+
+---
+
+
+## References
+
+- [Chan, W., Jaitly, N., Le, Q. V., & Vinyals, O. (2015). Listen, attend and spell. arXiv preprint arXiv:1508.01211.](https://arxiv.org/pdf/1508.01211.pdf)
 
 
 ---

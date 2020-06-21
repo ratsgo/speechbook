@@ -23,7 +23,7 @@ permalink: /docs/neuralfe/pase
 
 ## PASE/PASE+
 
-PASE는 [싱크넷(SincNet)](https://ratsgo.github.io/speechbook/docs/neuralfe/sincnet)을 기본 뼈대로 하는 아키텍처입니다. 그림1을 보면 싱크넷 위에 7개의 콘볼루션 레이어를 쌓고 1차례의 선형변환(linear transformation)을 수행한 뒤 배치 정규화(Batch Normalization)를 수행하고 있는 걸 볼 수 있습니다. 저자들은 '싱크넷~배치 정규화'에 이르는 레이어를 인코더(encoder)라고 부르고 있습니다.
+[Problem-Agnostic Speech Encoder(PASE)](https://arxiv.org/pdf/1904.03416.pdf)는 [싱크넷(SincNet)](https://ratsgo.github.io/speechbook/docs/neuralfe/sincnet)을 기본 뼈대로 하는 아키텍처입니다. 그림1을 보면 싱크넷 위에 7개의 콘볼루션 레이어를 쌓고 1차례의 선형변환(linear transformation)을 수행한 뒤 배치 정규화(Batch Normalization)를 수행하고 있는 걸 볼 수 있습니다. 저자들은 '싱크넷~배치 정규화'에 이르는 레이어를 인코더(encoder)라고 부르고 있습니다.
 
 PASE가 싱크넷과 가장 다른 점은 워커(worker)입니다. 그림1에서 Waveform, MFCC 등이 바로 그것입니다. 이 워커들은 인코더를 학습하기 위해 존재합니다. 예컨대 인코더에서 뽑은 100차원짜리 벡터(그림1에서 BN 상단의 녹색으로 칠한 네모)가 있습니다. 이를 프레임 벡터라고 부르겠습니다.
 
@@ -37,7 +37,7 @@ PASE가 싱크넷과 가장 다른 점은 워커(worker)입니다. 그림1에서
 
 PASE 학습이 끝나면 워커를 제거하고 인코더만 사용합니다. 이 인코더는 원시 음성의 다양하고 풍부한 정보를 추출할 수 있는 능력이 있습니다. 워커 덕분입니다. 아울러 이 인코더는 딥러닝 기반의 모델로 다른 태스크를 수행할 때 같이 학습도 할 수 있다는 장점도 있습니다.
 
-그림2는 PASE의 개선된 버전인 PASE+입니다. PASE 대비 워커의 종류가 늘었고 인코더 구조를 개선하였습니다. 이 글 나머지에서는 그림2의 PASE+를 기준으로 설명하겠습니다.
+그림2는 PASE의 개선된 버전인 [PASE+](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9053569&casa_token=Y9eGnBS64jYAAAAA:NNteZ3gGJ9hY_d7Vy8KvmjByvrmU6kYP937xT3KtwvYocPQUXVZjX7IMtTFCUH2pKxRUbOBxtbFT&tag=1)입니다. PASE 대비 워커의 종류가 늘었고 인코더 구조를 개선하였습니다. 이 글 나머지에서는 그림2의 PASE+를 기준으로 설명하겠습니다.
 
 ## **그림2** PASE+
 {: .no_toc .text-delta }
@@ -122,5 +122,12 @@ PASE+의 음성 피처 성능은 표1, 표2와 같습니다. 표1, 표2 모두 P
 ## **표2** PASE+
 {: .no_toc .text-delta }
 <img src="https://i.imgur.com/Q2UJJJw.png" width="400px" title="source: imgur.com" />
+
+---
+
+## References
+
+- [Pascual, S., Ravanelli, M., Serrà, J., Bonafonte, A., & Bengio, Y. (2019). Learning problem-agnostic speech representations from multiple self-supervised tasks. arXiv preprint arXiv:1904.03416.](https://arxiv.org/pdf/1904.03416)
+- [Ravanelli, M., Zhong, J., Pascual, S., Swietojanski, P., Monteiro, J., Trmal, J., & Bengio, Y. (2020, May). Multi-task self-supervised learning for Robust Speech Recognition. In ICASSP 2020-2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 6989-6993). IEEE.](https://ieeexplore.ieee.org/iel7/9040208/9052899/09053569.pdf?casa_token=Y9eGnBS64jYAAAAA:NNteZ3gGJ9hY_d7Vy8KvmjByvrmU6kYP937xT3KtwvYocPQUXVZjX7IMtTFCUH2pKxRUbOBxtbFT)
 
 ---

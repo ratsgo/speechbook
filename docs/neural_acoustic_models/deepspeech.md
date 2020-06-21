@@ -9,7 +9,7 @@ permalink: /docs/neuralam/deepspeech
 # Deep Speech
 {: .no_toc }
 
-중국 대표 IT 기업 '바이두(baidu)'에서 공개한 End-to-End 음성 인식 모델 **Deep Speech2** 모델을 소개합니다. 이 모델은 이전 기법(Deep Speech) 대비 성능을 대폭 끌어 올려 주목을 받았습니다. 이뿐 아니라 학습 등 실전 테크닉 꿀팁도 대거 방출해 눈길을 끕니다.
+중국 대표 IT 기업 '바이두(baidu)'에서 공개한 End-to-End 음성 인식 모델 [Deep Speech2]() 모델을 소개합니다. 이 모델은 이전 기법(Deep Speech) 대비 성능을 대폭 끌어 올려 주목을 받았습니다. 이뿐 아니라 학습 등 실전 테크닉 꿀팁도 대거 방출해 눈길을 끕니다.
 {: .fs-4 .ls-1 .code-example }
 
 
@@ -192,5 +192,12 @@ $$\overrightarrow { { h }_{ t }^{ l } } =f\left( \cal{ B } \left( { W }^{ l }{ h
 - Convoltion Layer : 2D conv, 3개 레이어
 - Bidirectional Recuurent Layer : Vanllia RNN, 7개 레이어
 - Fully Connected Layer : 1개 레이어
+
+---
+
+
+## References
+
+- [Amodei, D., Ananthanarayanan, S., Anubhai, R., Bai, J., Battenberg, E., Case, C., ... & Chen, J. (2016, June). Deep speech 2: End-to-end speech recognition in english and mandarin. In International conference on machine learning (pp. 173-182).](http://proceedings.mlr.press/v48/amodei16.pdf)
 
 ---

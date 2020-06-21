@@ -10,7 +10,7 @@ permalink: /docs/neuralfe/wav2vec
 {: .no_toc }
 
 
-뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 Wav2Vec/VQ-Wav2Vec 모델을 살펴봅니다. 사람의 개입 없이 음성 특질을 추출하는 방법을 제안해 주목을 받았습니다. 다만 음성 특질의 품질이 [PASE](https://ratsgo.github.io/speechbook/docs/neuralfe/pase)보다는 낮은 경향이 있고 아직은 정립이 되지 않은 방법론이라 생각돼 그 핵심 아이디어만 간략하게 일별하는 방식으로 정리해 보겠습니다. 
+뉴럴네트워크 기반 피처 추출 기법 가운데 하나인 [Wav2Vec](https://arxiv.org/pdf/1904.05862)/[VQ-Wav2Vec](https://arxiv.org/pdf/1910.05453) 모델을 살펴봅니다. 사람의 개입 없이 음성 특질을 추출하는 방법을 제안해 주목을 받았습니다. 다만 음성 특질의 품질이 [PASE](https://ratsgo.github.io/speechbook/docs/neuralfe/pase)보다는 낮은 경향이 있고 아직은 정립이 되지 않은 방법론이라 생각돼 그 핵심 아이디어만 간략하게 일별하는 방식으로 정리해 보겠습니다. 
 {: .fs-4 .ls-1 .code-example }
 
 
@@ -24,7 +24,7 @@ permalink: /docs/neuralfe/wav2vec
 
 ## Wav2Vec
 
-Wav2Vec의 전체 아키텍처는 그림1과 같습니다. Wav2Vec은 크게 encoder network $f$와 context network $g$ 두 개 파트로 구성돼 있습니다. 둘 모두 컨볼루션 뉴럴네트워크(convolutional neural network)입니다.
+[Wav2Vec](https://arxiv.org/pdf/1904.05862)의 전체 아키텍처는 그림1과 같습니다. Wav2Vec은 크게 encoder network $f$와 context network $g$ 두 개 파트로 구성돼 있습니다. 둘 모두 컨볼루션 뉴럴네트워크(convolutional neural network)입니다.
 
 encoder network $f$는 음성 입력 $\mathcal{X}$를 hidden representaion $\mathcal{Z}$로 인코딩하는 역할을 수행합니다. context network $g$는 $\mathcal{Z}$를 context representation $\mathcal{C}$로 변환합니다. Wav2Vec 학습을 마치면 $\mathcal{C}$를 해당 음성의 피처로 사용합니다.
 
@@ -41,7 +41,7 @@ Wav2Vec은 Word2Vec처럼 해당 입력이 포지티브 쌍인지 네거티브 �
 
 ## VQ-Wav2Vec
 
-VQ-Wav2Vec은 기본적으로는 Wav2Vec의 아키텍처와 같습니다. 다만 중간에 Vector Quantization 모듈이 추가됐습니다. 그림2와 같습니다. encoder network $f$는 음성 입력 $\mathcal{X}$를 hidden representaion $\mathcal{Z}$로 인코딩하는 역할을 수행합니다. Vector Quantization 모듈 $q$는 continous representaion $\mathcal{Z}$를 dicrete representaion $\hat{\mathcal{Z}}$로 변환합니다. context network $g$는 $\hat{\mathcal{Z}}$를 context representation $\mathcal{C}$로 변환합니다.
+[VQ-Wav2Vec](https://arxiv.org/pdf/1910.05453)은 기본적으로는 Wav2Vec의 아키텍처와 같습니다. 다만 중간에 Vector Quantization 모듈이 추가됐습니다. 그림2와 같습니다. encoder network $f$는 음성 입력 $\mathcal{X}$를 hidden representaion $\mathcal{Z}$로 인코딩하는 역할을 수행합니다. Vector Quantization 모듈 $q$는 continous representaion $\mathcal{Z}$를 dicrete representaion $\hat{\mathcal{Z}}$로 변환합니다. context network $g$는 $\hat{\mathcal{Z}}$를 context representation $\mathcal{C}$로 변환합니다.
 
 ## **그림2** VQ-Wav2Vec
 {: .no_toc .text-delta }
@@ -101,5 +101,13 @@ VQ-Wav2Vec 저자들은 K-means Clustering 방식으로도 Vector Quantization�
 <img src="https://i.imgur.com/nrY2IAx.png" width="400px" title="source: imgur.com" />
 
 argmin 역시 미분이 불가능한데요. Gumbel Softmax 때처럼 순전파와 역전파 과정을 섬세하게 설계하면 미분 가능하게 만들 수 있습니다.
+
+---
+
+## References
+
+- [Schneider, S., Baevski, A., Collobert, R., & Auli, M. (2019). wav2vec: Unsupervised pre-training for speech recognition. arXiv preprint arXiv:1904.05862.](https://arxiv.org/pdf/1904.05862)
+- [Baevski, A., Schneider, S., & Auli, M. (2019). vq-wav2vec: Self-supervised learning of discrete speech representations. arXiv preprint arXiv:1910.05453.](https://arxiv.org/pdf/1910.05453)
+
 
 ---
